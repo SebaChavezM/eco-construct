@@ -1,0 +1,71 @@
+.sidebar {
+  width: 240px;
+  background-color: #16a249;
+  color: white;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.logo-icon {
+  font-size: 1.5rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.brand-name {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.nav-section {
+  flex: 1;
+}
+.nav-section-title {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin: 1rem 0 0.5rem;
+}
+.nav-link {
+  color: white;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+.nav-link.active,
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+.card-body h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.form-control-plaintext {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  margin-bottom: 0;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: .25rem;
+}
+
+.avatar-placeholder,
+.rounded-circle {
+  object-fit: cover;
+}
+
+h2.h3 {
+  font-size: 1.75rem;
+  font-weight: 600;
+}

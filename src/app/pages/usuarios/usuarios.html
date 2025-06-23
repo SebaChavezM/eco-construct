@@ -1,0 +1,213 @@
+<!-- src/app/pages/usuarios/usuarios.component.html -->
+<div class="d-flex vh-100 overflow-hidden">
+  <!-- Sidebar -->
+   <aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
+  <div class="d-flex align-items-center mb-4">
+    <i class="bi bi-leaf-fill fs-4 me-2"></i>
+    <span class="h5 mb-0">EcoConstruct</span>
+  </div>
+
+  <nav class="nav flex-column">
+    <!-- Sección principal -->
+    <small class="text-uppercase text-white-50 mb-2">Principal</small>
+
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-speedometer2 me-2"></i>
+      Dashboard
+    </a>
+
+    <a
+      routerLink="/gestion-obras"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-building me-2"></i>
+      Gestión de Obras
+    </a>
+
+    <a
+      routerLink="/registro-residuos"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-card-checklist me-2"></i>
+      Registro de Residuos
+    </a>
+
+    <a
+      routerLink="/transporte"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-truck me-2"></i>
+      Transporte
+    </a>
+
+    <a
+      routerLink="/historial-trazabilidad"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-clock-history me-2"></i>
+      Historial y Trazabilidad
+    </a>
+
+    <a
+      routerLink="/reportes"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-bar-chart me-2"></i>
+      Reportes
+    </a>
+
+    <hr class="border-light">
+
+    <!-- Sección sistema -->
+    <small class="text-uppercase text-white-50 mb-2">Sistema</small>
+    <a
+      routerLink="/perfil"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-person-circle me-2"></i>
+      Perfil
+    </a>
+    <a
+      routerLink="/configuracion"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-gear me-2"></i>
+      Configuración
+    </a>
+          <a routerLink="/usuarios"
+         routerLinkActive="active"
+         class="nav-link text-white mt-2">
+        <i class="bi bi-people me-2"></i>Usuarios
+      </a>
+  </nav>
+</aside>
+  <!-- Main content -->
+  <main class="flex-grow-1 overflow-auto p-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="h3 mb-1">Gestión de Usuarios</h2>
+        <small class="text-muted">Administra usuarios, roles y permisos del sistema</small>
+      </div>
+      <button class="btn btn-success">
+        <i class="bi bi-person-plus me-1"></i>Nuevo Usuario
+      </button>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="row gx-3 gy-3 mb-4">
+      <!-- Total Usuarios -->
+      <div class="col-6 col-md-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body position-relative">
+            <small class="text-muted">Total Usuarios</small>
+            <h2 class="fw-bold mt-1">{{ stats[0].value }}</h2>
+            <small class="text-muted">{{ activeCount }} activos</small>
+            <i class="bi bi-people position-absolute" style="top:1rem; right:1rem; color:#6b7280;"></i>
+          </div>
+        </div>
+      </div>
+      <!-- Administradores / Supervisores / Operadores -->
+      <div class="col-6 col-md-3" *ngFor="let card of stats.slice(1)">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body position-relative">
+            <small class="text-muted">{{ card.label }}</small>
+            <h2 class="fw-bold mt-1">{{ card.value }}</h2>
+            <small class="text-muted">
+              <!-- textos fijos según índice -->
+              {{ card.label === 'Administradores' ? 'Acceso completo'
+                 : card.label === 'Supervisores'   ? 'Gestión de proyectos'
+                 : 'Operaciones básicas' }}
+            </small>
+            <i class="bi {{ card.icon }} position-absolute" style="top:1rem; right:1rem; color:#6b7280;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="card mb-4 shadow-sm">
+      <div class="card-body">
+        <div class="row g-3 align-items-center">
+          <div class="col-12 col-md-6">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Buscar por nombre o email..."
+              [(ngModel)]="filterName"/>
+          </div>
+          <div class="col-6 col-md-3">
+            <select class="form-select" [(ngModel)]="filterRole">
+              <option value="">Todos los roles</option>
+              <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-3">
+            <select class="form-select" [(ngModel)]="filterState">
+              <option value="">Todos los estados</option>
+              <option *ngFor="let s of states" [value]="s">{{ s }}</option>
+            </select>
+          </div>
+          <div class="col-auto">
+            <button
+              class="btn btn-outline-secondary"
+              (click)="filterName=''; filterRole=''; filterState=''">
+              Limpiar filtros
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de usuarios -->
+    <div class="card shadow-sm">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Usuario</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Proyectos</th>
+              <th>Último Acceso</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let u of filteredUsers">
+              <td>
+                <div class="fw-bold">{{ u.fullName }}</div>
+                <div class="text-muted small">{{ u.email }}</div>
+              </td>
+              <td><span [ngClass]="roleBadge(u.role)">{{ u.role }}</span></td>
+              <td><span [ngClass]="stateBadge(u.state)">{{ u.state }}</span></td>
+              <td>{{ u.projects }}</td>
+              <td>{{ u.lastAccess }}</td>
+              <td>
+                <button class="btn btn-outline-secondary btn-sm me-1">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-outline-danger btn-sm">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>

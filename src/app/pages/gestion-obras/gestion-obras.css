@@ -1,0 +1,78 @@
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background-color: #16a249;
+  color: white;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.logo-icon {
+  font-size: 1.5rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.brand-name {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.nav-section {
+  flex: 1;
+}
+.nav-section-title {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin: 1rem 0 0.5rem;
+}
+.nav-link {
+  color: white;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+.nav-link.active,
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+.obra-card {
+  border-radius: .75rem;
+}
+
+.obra-card h5 {
+  font-weight: 600;
+}
+
+.obra-card .badge {
+  font-size: .75rem;
+  text-transform: none;
+  padding: .4em .8em;
+}
+
+.progress {
+  background-color: #e9ecef;
+}
+
+.progress-bar {
+  transition: width .6s ease;
+}
+
+/* Responsivo: en pantallas muy pequeñas apila los detalles */
+@media(max-width: 576px) {
+  .obra-card .d-flex.flex-wrap {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .obra-card .progress {
+    width: 100% !important;
+  }
+}

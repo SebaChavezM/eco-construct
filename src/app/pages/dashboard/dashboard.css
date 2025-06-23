@@ -1,0 +1,198 @@
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9fafb;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background-color: #16a249;
+  color: white;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.logo-icon {
+  font-size: 1.5rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.brand-name {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.nav-section {
+  flex: 1;
+}
+.nav-section-title {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin: 1rem 0 0.5rem;
+}
+.nav-link {
+  color: white;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+.nav-link.active,
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+/* Main */
+.main-content {
+  flex: 1;
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+}
+
+/* Steps */
+.step-btn {
+  border-width: 1.5px;
+  border-radius: 0.5rem;
+  transition: background-color .2s, box-shadow .2s;
+}
+
+.step-btn:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.step-number {
+  font-size: 1rem;
+}
+
+.step-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.step-subtitle {
+  font-size: 0.85rem;
+}
+
+.step-icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header + filters */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.page-subtitle {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+.filters select {
+  width: auto;
+  margin-left: 0.5rem;
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.stat-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.stat-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0.25rem 0;
+}
+.stat-footer {
+  font-size: 0.8rem;
+}
+
+/* Charts grid */
+.charts-grid {
+  display: grid;
+  /* Dos columnas iguales siempre */
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  /* opcional: limitar el ancho total y centrarlo */
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.chart-card {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+.chart-header {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+.chart {
+  display: block;
+  width: 100% !important;
+  height: 300px !important;
+}
+
+/* Quick actions */
+.quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+.quick-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .steps {
+    grid-template-columns: 1fr;
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

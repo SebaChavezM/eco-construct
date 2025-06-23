@@ -1,0 +1,133 @@
+/* Layout general */
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Lado izquierdo */
+.left-side {
+  display: none;
+  width: 50%;
+  position: relative;
+  background: linear-gradient(135deg, #34d399 0%, #14b8a6 35%, #06b6d4 100%);
+  color: white;
+  padding: 4rem 3rem;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.left-side .logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.left-side .logo-icon {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-side .brand-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.brand-title {
+  font-size: 2.25rem;
+  font-weight: 300;
+  margin-bottom: 0.5rem;
+}
+
+.brand-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.125rem;
+  font-weight: 300;
+}
+
+/* Lado derecho */
+.right-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 440px;
+  padding: 1rem;
+}
+
+.form-header h2 {
+  font-weight: 300;
+  font-size: 1.8rem;
+}
+
+.form-header p {
+  color: #6b7280;
+}
+
+/* Divider visual */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #d1d5db;
+  margin: 0 0.75rem;
+}
+
+/* Credenciales demo */
+.demo-credentials {
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 0.875rem;
+}
+
+.demo-credentials p {
+  margin: 0;
+}
+
+.demo-credentials .demo-title {
+  font-weight: 600;
+  color: #065f46;
+  margin-bottom: 0.5rem;
+}
+
+.demo-info {
+  color: #047857;
+}
+
+/* Responsive */
+@media (min-width: 1024px) {
+  .left-side {
+    display: flex;
+  }
+}
+
+/* Otros ajustes */
+button:focus,
+input:focus,
+.form-control:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}

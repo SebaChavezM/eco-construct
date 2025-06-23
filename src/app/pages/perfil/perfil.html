@@ -1,0 +1,259 @@
+<!-- perfil.component.html -->
+<div class="d-flex vh-100 overflow-hidden">
+  <!-- Sidebar -->
+  <aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
+    <div class="d-flex align-items-center mb-4">
+      <i class="bi bi-leaf-fill fs-4 me-2"></i>
+      <span class="h5 mb-0">EcoConstruct</span>
+    </div>
+
+    <nav class="nav flex-column">
+      <!-- Sección principal -->
+      <small class="text-uppercase text-white-50 mb-2">Principal</small>
+
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link text-white"
+      >
+        <i class="bi bi-speedometer2 me-2"></i>
+        Dashboard
+      </a>
+
+      <a
+        routerLink="/gestion-obras"
+        routerLinkActive="active"
+        class="nav-link text-white"
+      >
+        <i class="bi bi-building me-2"></i>
+        Gestión de Obras
+      </a>
+
+      <a
+        routerLink="/registro-residuos"
+        routerLinkActive="active"
+        class="nav-link text-white"
+      >
+        <i class="bi bi-card-checklist me-2"></i>
+        Registro de Residuos
+      </a>
+
+      <a
+        routerLink="/transporte"
+        routerLinkActive="active"
+        class="nav-link text-white"
+      >
+        <i class="bi bi-truck me-2"></i>
+        Transporte
+      </a>
+
+      <a
+        routerLink="/historial-trazabilidad"
+        routerLinkActive="active"
+        class="nav-link text-white"
+      >
+        <i class="bi bi-clock-history me-2"></i>
+        Historial y Trazabilidad
+      </a>
+
+      <a
+        routerLink="/reportes"
+        routerLinkActive="active"
+        class="nav-link text-white"
+      >
+        <i class="bi bi-bar-chart me-2"></i>
+        Reportes
+      </a>
+
+      <hr class="border-light">
+
+      <!-- Sección sistema -->
+      <small class="text-uppercase text-white-50 mb-2">Sistema</small>
+      <a
+        routerLink="/perfil"
+        routerLinkActive="active"
+        class="nav-link text-white"
+      >
+        <i class="bi bi-person-circle me-2"></i>
+        Perfil
+      </a>
+      <a
+        routerLink="/configuracion"
+        routerLinkActive="active"
+        class="nav-link text-white"
+      >
+        <i class="bi bi-gear me-2"></i>
+        Configuración
+      </a>
+            <a routerLink="/usuarios"
+          routerLinkActive="active"
+          class="nav-link text-white mt-2">
+          <i class="bi bi-people me-2"></i>Usuarios
+        </a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="flex-grow-1 overflow-auto p-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="h3 mb-1">Perfil de Usuario</h2>
+        <small class="text-muted">Gestiona tu información personal y configuración de cuenta</small>
+      </div>
+      <button class="btn btn-success">
+        <i class="bi bi-pencil me-1"></i>Editar Perfil
+      </button>
+    </div>
+
+    <div class="row gx-4 gy-4">
+      <!-- Información Personal -->
+      <div class="col-12 col-lg-8">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <h5 class="mb-3">
+              <i class="bi bi-person-circle me-2"></i>Información Personal
+            </h5>
+            <small class="text-muted">
+              Datos básicos de tu cuenta en EcoConstruct
+            </small>
+
+            <!-- Bloque avatar + nombre/email/rol -->
+            <div class="d-flex align-items-center mt-4 mb-3">
+              <img
+                [src]="user.avatarUrl"
+                alt="Avatar"
+                class="rounded-circle border me-4"
+                width="80"
+                height="80"
+              />
+              <div>
+                <div class="fw-bold fs-5">{{ user.fullName }}</div>
+                <div class="text-muted small mb-2">{{ user.email }}</div>
+                <span class="badge bg-success bg-opacity-10 text-success">
+                  {{ user.role }}
+                </span>
+              </div>
+            </div>
+            <hr/>
+
+            <!-- Formulario en dos columnas -->
+            <form class="row g-3">
+              <div class="col-6">
+                <label class="form-label">Nombre Completo</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="user.fullName"
+                  readonly
+                />
+              </div>
+              <div class="col-6">
+                <label class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  [value]="user.email"
+                  readonly
+                />
+              </div>
+              <div class="col-6">
+                <label class="form-label">Teléfono</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="user.phone"
+                  readonly
+                />
+              </div>
+              <div class="col-6">
+                <label class="form-label">Cargo</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="user.position"
+                  readonly
+                />
+              </div>
+              <div class="col-6">
+                <label class="form-label">Empresa</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="user.company"
+                  readonly
+                />
+              </div>
+              <div class="col-6">
+                <label class="form-label">Ubicación</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="user.location"
+                  readonly
+                />
+              </div>
+              <div class="col-12">
+                <label class="form-label">Biografía</label>
+                <textarea
+                  class="form-control"
+                  rows="3"
+                  [value]="user.bio"
+                  readonly
+                ></textarea>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paneles laterales -->
+      <div class="col-12 col-lg-4">
+        <!-- Estadísticas -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <h5 class="mb-3">
+              <i class="bi bi-bar-chart-line me-2"></i>Estadísticas
+            </h5>
+            <ul class="list-unstyled mb-0">
+              <li *ngFor="let s of stats" class="d-flex justify-content-between">
+                <span>{{ s.label }}</span>
+                <strong>{{ s.value }}</strong>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Actividad Reciente -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <h5 class="mb-3">
+              <i class="bi bi-clock-history me-2"></i>Actividad Reciente
+            </h5>
+            <ul class="list-unstyled mb-0">
+              <li *ngFor="let a of activities" class="mb-3">
+                <div class="fw-semibold">{{ a.title }}</div>
+                <small class="text-muted d-block">{{ a.description }}</small>
+                <small class="text-muted">{{ a.date }}</small>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Información de Contacto -->
+        <div class="card mb-4 shadow-sm">
+          <div class="card-body">
+            <h5 class="mb-3">
+              <i class="bi bi-envelope me-2"></i>Información de Contacto
+            </h5>
+            <p class="mb-2"><i class="bi bi-envelope me-1"></i>{{ user.email }}</p>
+            <p class="mb-2"><i class="bi bi-telephone me-1"></i>{{ user.phone }}</p>
+            <p class="mb-2"><i class="bi bi-geo-alt me-1"></i>{{ user.location }}</p>
+            <p class="mb-0"><i class="bi bi-building me-1"></i>{{ user.company }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
