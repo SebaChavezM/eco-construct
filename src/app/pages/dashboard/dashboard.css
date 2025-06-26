@@ -5,7 +5,6 @@
   background-color: #f9fafb;
 }
 
-/* Sidebar */
 .sidebar {
   width: 240px;
   background-color: #16a249;
@@ -51,14 +50,12 @@
   opacity: 0.8;
 }
 
-/* Main */
 .main-content {
   flex: 1;
   padding: 1.5rem 2rem;
   overflow-y: auto;
 }
 
-/* Steps */
 .step-btn {
   border-width: 1.5px;
   border-radius: 0.5rem;
@@ -90,7 +87,6 @@
   justify-content: center;
 }
 
-/* Header + filters */
 .header {
   display: flex;
   justify-content: space-between;
@@ -110,7 +106,6 @@
   margin-left: 0.5rem;
 }
 
-/* Stats grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -136,14 +131,11 @@
   font-size: 0.8rem;
 }
 
-/* Charts grid */
 .charts-grid {
   display: grid;
-  /* Dos columnas iguales siempre */
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   margin-bottom: 2rem;
-  /* opcional: limitar el ancho total y centrarlo */
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
@@ -164,7 +156,6 @@
   height: 300px !important;
 }
 
-/* Quick actions */
 .quick-actions {
   display: flex;
   flex-wrap: wrap;
@@ -177,7 +168,6 @@
   gap: 0.5rem;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .dashboard-layout {
     flex-direction: column;

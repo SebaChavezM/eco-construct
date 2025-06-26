@@ -1,0 +1,209 @@
+<div class="d-flex vh-100 overflow-hidden">
+
+<aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
+  <div class="d-flex align-items-center mb-4">
+    <i class="bi bi-leaf-fill fs-4 me-2"></i>
+    <span class="h5 mb-0">EcoConstruct</span>
+  </div>
+
+  <nav class="nav flex-column">
+
+    <small class="text-uppercase text-white-50 mb-2">Principal</small>
+
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-speedometer2 me-2"></i>
+      Dashboard
+    </a>
+
+    <a
+      routerLink="/gestion-obras"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-building me-2"></i>
+      Gestión de Obras
+    </a>
+
+    <a
+      routerLink="/registro-residuos"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-card-checklist me-2"></i>
+      Registro de Residuos
+    </a>
+
+    <a
+      routerLink="/transporte"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-truck me-2"></i>
+      Transporte
+    </a>
+
+    <a
+      routerLink="/historial-trazabilidad"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-clock-history me-2"></i>
+      Historial y Trazabilidad
+    </a>
+
+    <a
+      routerLink="/reportes"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-bar-chart me-2"></i>
+      Reportes
+    </a>
+
+    <hr class="border-light">
+
+    <small class="text-uppercase text-white-50 mb-2">Sistema</small>
+    <a
+      routerLink="/perfil"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-person-circle me-2"></i>
+      Perfil
+    </a>
+    <a
+      routerLink="/configuracion"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-gear me-2"></i>
+      Configuración
+    </a>
+          <a routerLink="/usuarios"
+         routerLinkActive="active"
+         class="nav-link text-white mt-2">
+        <i class="bi bi-people me-2"></i>Usuarios
+      </a>
+  </nav>
+</aside>
+
+  <main class="flex-grow-1 overflow-auto p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="h3 mb-1">Gestión de Transporte</h2>
+        <small class="text-muted">Registra y rastrea el transporte de residuos</small>
+      </div>
+    </div>
+
+    <div class="card mb-5 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="bi bi-truck me-2"></i>Nuevo Transporte
+        </h5>
+        <small class="text-muted d-block mb-4">
+          Registra el transporte de residuos desde la obra hasta su destino final
+        </small>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Residuo a Transportar</label>
+            <select class="form-select" [(ngModel)]="nuevo.residuo">
+              <option value="" disabled selected>Selecciona el residuo</option>
+              <option *ngFor="let r of residuos" [value]="r">{{ r }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Transportista</label>
+            <select class="form-select" [(ngModel)]="nuevo.transportista">
+              <option value="" disabled selected>Selecciona transportista</option>
+              <option *ngFor="let t of transportistas" [value]="t">{{ t }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Destino Final</label>
+            <select class="form-select" [(ngModel)]="nuevo.obra">
+              <option value="" disabled selected>Selecciona destino</option>
+              <option *ngFor="let d of destinos" [value]="d">{{ d }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Conductor</label>
+            <input type="text" class="form-control" placeholder="Nombre del conductor"
+                   [(ngModel)]="nuevo.conductor" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Patente del Vehículo</label>
+            <input type="text" class="form-control" placeholder="ABC-1234"
+                   [(ngModel)]="nuevo.patente" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Fecha y Hora de Salida</label>
+            <input type="datetime-local" class="form-control"
+                   [(ngModel)]="nuevo.fechaSalida" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Fecha y Hora Estimada de Llegada</label>
+            <input type="datetime-local" class="form-control"
+                   [(ngModel)]="nuevo.fechaLlegada" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Número de Guía</label>
+            <input type="text" class="form-control" placeholder="Ingresa número de guía"
+                   [(ngModel)]="nuevo.guia" />
+          </div>
+
+          <div class="col-12 text-end mt-3">
+            <button class="btn btn-success me-2" (click)="register()">
+              <i class="bi bi-plus-lg me-1"></i>Registrar Transporte
+            </button>
+            <button class="btn btn-outline-secondary">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-4">Transportes en Curso</h5>
+        <ul class="list-unstyled mb-0">
+          <li *ngFor="let t of enCurso" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
+              <div>
+                <strong>{{ t.residuo }} – {{ t.patente }}</strong>
+                <div class="text-muted small">
+                  {{ t.obra }} → {{ t.transportista }}
+                </div>
+              </div>
+              <span class="badge bg-success">En tránsito</span>
+            </div>
+
+            <div class="row mt-2 g-3 align-items-center">
+              <div class="col-auto">
+                <i class="bi bi-person me-1"></i><small>{{ t.conductor }}</small>
+              </div>
+              <div class="col-auto">
+                <i class="bi bi-clock me-1"></i><small>Salida {{ t.fechaSalida | date:'HH:mm' }}</small>
+              </div>
+              <div class="col-auto">
+                <i class="bi bi-clock-history me-1"></i><small>ETA {{ t.fechaLlegada | date:'HH:mm' }}</small>
+              </div>
+              <div class="col text-end">
+                <button class="btn btn-outline-secondary btn-sm me-2">Ver Detalle</button>
+                <button class="btn btn-outline-secondary btn-sm">Rastrear</button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</div>

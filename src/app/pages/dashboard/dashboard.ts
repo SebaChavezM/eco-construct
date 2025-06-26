@@ -1,4 +1,3 @@
-// dashboard.component.ts
 import { Component } from '@angular/core';
 import { ChartOptions, ChartData } from 'chart.js';
 import { CommonModule } from '@angular/common';
@@ -13,7 +12,7 @@ import { NgChartsModule } from 'ng2-charts';
   styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent {
-  // --- Pie chart ---
+
   public pieChartLabels = ['Reciclado', 'Disposición final', 'Reutilizado', 'Otro'];
   public pieChartData: ChartData<'pie', number[], string> = {
     labels: this.pieChartLabels,
@@ -22,7 +21,7 @@ export class DashboardComponent {
       backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ef4444']
     }]
   };
-  // aquí forzamos el literal 'pie'
+
   public pieChartType: 'pie' = 'pie';
   public pieChartOptions: ChartOptions<'pie'> = {
     responsive: true,
@@ -35,7 +34,6 @@ export class DashboardComponent {
     }
   };
 
-  // --- Bar chart ---
   public barChartLabels = ['Torre Norte', 'Centro Plaza', 'Corporativo'];
   public barChartData: ChartData<'bar'> = {
     labels: this.barChartLabels,
@@ -45,7 +43,6 @@ export class DashboardComponent {
       { label: 'Metal',    data: [ 9,  5, 11], backgroundColor: '#3b82f6' }
     ]
   };
-  // aquí forzamos el literal 'bar'
   public barChartType: 'bar' = 'bar';
   public barChartOptions: ChartOptions<'bar'> = {
     responsive: true,

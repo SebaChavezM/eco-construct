@@ -1,0 +1,183 @@
+<div class="d-flex vh-100 overflow-hidden">
+
+<aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
+  <div class="d-flex align-items-center mb-4">
+    <i class="bi bi-leaf-fill fs-4 me-2"></i>
+    <span class="h5 mb-0">EcoConstruct</span>
+  </div>
+
+  <nav class="nav flex-column">
+
+    <small class="text-uppercase text-white-50 mb-2">Principal</small>
+
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-speedometer2 me-2"></i>
+      Dashboard
+    </a>
+
+    <a
+      routerLink="/gestion-obras"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-building me-2"></i>
+      Gestión de Obras
+    </a>
+
+    <a
+      routerLink="/registro-residuos"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-card-checklist me-2"></i>
+      Registro de Residuos
+    </a>
+
+    <a
+      routerLink="/transporte"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-truck me-2"></i>
+      Transporte
+    </a>
+
+    <a
+      routerLink="/historial-trazabilidad"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-clock-history me-2"></i>
+      Historial y Trazabilidad
+    </a>
+
+    <a
+      routerLink="/reportes"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-bar-chart me-2"></i>
+      Reportes
+    </a>
+
+    <hr class="border-light">
+
+    <small class="text-uppercase text-white-50 mb-2">Sistema</small>
+    <a
+      routerLink="/perfil"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-person-circle me-2"></i>
+      Perfil
+    </a>
+    <a
+      routerLink="/configuracion"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-gear me-2"></i>
+      Configuración
+    </a>
+          <a routerLink="/usuarios"
+         routerLinkActive="active"
+         class="nav-link text-white mt-2">
+        <i class="bi bi-people me-2"></i>Usuarios
+      </a>
+  </nav>
+</aside>
+
+  <main class="flex-grow-1 p-4 overflow-auto">
+    <button class="btn btn-outline-secondary mb-3" (click)="cancelar()">
+      ← Volver
+    </button>
+
+    <h2>Nueva Obra</h2>
+    <small class="text-muted d-block mb-4">
+      Registra una nueva obra de construcción en el sistema
+    </small>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-4">Información de la Obra</h5>
+
+        <form (ngSubmit)="crearObra()" #f="ngForm">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Nombre de la Obra *</label>
+              <input type="text" class="form-control" required
+                     [(ngModel)]="obra.nombre" name="nombre"
+                     placeholder="Ej: Torre Residencial Norte">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Ubicación *</label>
+              <input type="text" class="form-control" required
+                     [(ngModel)]="obra.ubicacion" name="ubicacion"
+                     placeholder="Ej: Las Condes, Santiago">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Constructora *</label>
+              <input type="text" class="form-control" required
+                     [(ngModel)]="obra.constructora" name="constructora"
+                     placeholder="Ej: Constructora ABC">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Encargado Ambiental *</label>
+              <input type="text" class="form-control" required
+                     [(ngModel)]="obra.encargado" name="encargado"
+                     placeholder="Ej: Juan Pérez">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Fecha de Inicio *</label>
+              <input type="date" class="form-control" required
+                     [(ngModel)]="obra.fechaInicio" name="fechaInicio">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha de Finalización Estimada *</label>
+              <input type="date" class="form-control" required
+                     [(ngModel)]="obra.fechaFin" name="fechaFin">
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Tipo de Obra *</label>
+              <select class="form-select" required
+                      [(ngModel)]="obra.tipo" name="tipo">
+                <option value="" disabled selected>Seleccionar tipo</option>
+                <option *ngFor="let t of tipos" [value]="t">{{ t }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Estado Inicial</label>
+              <select class="form-select"
+                      [(ngModel)]="obra.estado" name="estado">
+                <option value="" disabled selected>Seleccionar estado</option>
+                <option *ngFor="let s of estados" [value]="s">{{ s }}</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Descripción</label>
+              <textarea class="form-control" rows="4"
+                        [(ngModel)]="obra.descripcion" name="descripcion"
+                        placeholder="Descripción detallada de la obra (opcional)"></textarea>
+            </div>
+          </div>
+
+          <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-success" [disabled]="f.invalid">
+              <i class="bi bi-save me-1"></i>Crear Obra
+            </button>
+            <button type="button" class="btn btn-outline-secondary" (click)="cancelar()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</div>

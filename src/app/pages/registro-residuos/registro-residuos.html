@@ -1,0 +1,213 @@
+<div class="d-flex vh-100 overflow-hidden">
+
+<aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
+  <div class="d-flex align-items-center mb-4">
+    <i class="bi bi-leaf-fill fs-4 me-2"></i>
+    <span class="h5 mb-0">EcoConstruct</span>
+  </div>
+
+  <nav class="nav flex-column">
+
+    <small class="text-uppercase text-white-50 mb-2">Principal</small>
+
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-speedometer2 me-2"></i>
+      Dashboard
+    </a>
+
+    <a
+      routerLink="/gestion-obras"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-building me-2"></i>
+      Gestión de Obras
+    </a>
+
+    <a
+      routerLink="/registro-residuos"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-card-checklist me-2"></i>
+      Registro de Residuos
+    </a>
+
+    <a
+      routerLink="/transporte"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-truck me-2"></i>
+      Transporte
+    </a>
+
+    <a
+      routerLink="/historial-trazabilidad"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-clock-history me-2"></i>
+      Historial y Trazabilidad
+    </a>
+
+    <a
+      routerLink="/reportes"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-bar-chart me-2"></i>
+      Reportes
+    </a>
+
+    <hr class="border-light">
+
+    <small class="text-uppercase text-white-50 mb-2">Sistema</small>
+    <a
+      routerLink="/perfil"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-person-circle me-2"></i>
+      Perfil
+    </a>
+    <a
+      routerLink="/configuracion"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-gear me-2"></i>
+      Configuración
+    </a>
+          <a routerLink="/usuarios"
+         routerLinkActive="active"
+         class="nav-link text-white mt-2">
+        <i class="bi bi-people me-2"></i>Usuarios
+      </a>
+  </nav>
+</aside>
+
+  <main class="flex-grow-1 overflow-auto p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="h3 mb-1">Registro de Residuos</h2>
+        <small class="text-muted">Registra y clasifica los residuos generados en las obras</small>
+      </div>
+      <div class="btn-toolbar">
+        <button class="btn btn-outline-secondary me-2">
+          <i class="bi bi-search"></i> Buscar
+        </button>
+        <button class="btn btn-outline-secondary">
+          <i class="bi bi-funnel"></i> Filtros
+        </button>
+      </div>
+    </div>
+
+    <div class="card mb-5 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="bi bi-box-seam me-2"></i>Nuevo Registro de Residuo
+        </h5>
+        <small class="text-muted d-block mb-4">Completa la información del residuo generado</small>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Tipo de Residuo</label>
+            <select class="form-select" [(ngModel)]="registro.tipo">
+              <option value="" disabled selected>Selecciona el tipo</option>
+              <option *ngFor="let t of tipos" [value]="t">{{ t }}</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Cantidad</label>
+            <div class="input-group">
+              <input type="number" class="form-control" [(ngModel)]="registro.cantidad" />
+              <select class="form-select" style="max-width:100px" [(ngModel)]="registro.unidad">
+                <option *ngFor="let u of unidades" [value]="u">{{ u }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Obra Asociada</label>
+            <select class="form-select" [(ngModel)]="registro.obra">
+              <option value="" disabled selected>Selecciona la obra</option>
+              <option *ngFor="let o of obras" [value]="o">{{ o }}</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Responsable</label>
+            <input type="text" class="form-control" placeholder="Nombre del responsable"
+                   [(ngModel)]="registro.responsable" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Ubicación en Obra</label>
+            <input type="text" class="form-control" placeholder="Sector, piso, área específica"
+                   [(ngModel)]="registro.ubicacion" />
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Fecha y Hora</label>
+            <input type="datetime-local" class="form-control" [(ngModel)]="registro.fechaHora" />
+          </div>
+          <div class="col-12">
+            <label class="form-label">Observaciones</label>
+            <textarea class="form-control" rows="3"
+                      placeholder="Descripción adicional…" 
+                      [(ngModel)]="registro.observaciones"></textarea>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Evidencia Fotográfica (Opcional)</label>
+            <div class="upload-dropzone">
+              <i class="bi bi-camera fs-1"></i>
+              <p class="mt-2">Arrastra las imágenes aquí o haz clic para seleccionar</p>
+              <button class="btn btn-outline-primary btn-sm" (click)="fileInput.click()">
+                Seleccionar Archivos
+              </button>
+              <input #fileInput type="file" multiple hidden (change)="onFileChange($event)" />
+            </div>
+          </div>
+
+          <div class="col-12 text-end mt-3">
+            <button class="btn btn-success me-2" (click)="submit()">
+              <i class="bi bi-plus-lg me-1"></i>Registrar Residuo
+            </button>
+            <button class="btn btn-outline-secondary">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title mb-4">Residuos Registrados Recientemente</h5>
+        <ul class="list-unstyled mb-0">
+          <li *ngFor="let r of recientes" class="mb-4">
+            <div class="d-flex justify-content-between">
+              <div>
+                <strong>{{ r.tipo }} – {{ r.cantidad }} {{ r.unidad }}</strong>
+                <div class="text-muted small">
+                  {{ r.obra }} • {{ r.responsable }}
+                </div>
+              </div>
+              <div class="text-end">
+                <button class="btn btn-outline-secondary btn-sm me-2">
+                  Ver
+                </button>
+                <small class="text-muted">{{ r.fechaHora }}</small>
+              </div>
+            </div>
+            <hr>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,3 +1,8 @@
+:host {
+  display: flex;
+  height: 100vh;
+}
+
 .sidebar {
   width: 240px;
   background-color: #16a249;
@@ -43,30 +48,38 @@
   opacity: 0.8;
 }
 
-.table {
-  border-spacing: 0 0.5rem;
-  border-collapse: separate;
-}
-.table-light th {
-  border: none;
-}
-.table td, .table th {
-  vertical-align: middle;
-}
-.table tbody tr {
-  background: #ffffff;
-}
-.table tbody tr + tr td {
-  border-top: none;
-}
-.card-body .table {
-  margin: 0;
+.obra-card {
+  border-radius: .75rem;
 }
 
-.card-body.d-flex i {
-  opacity: 0.4;
+.obra-card h5 {
+  font-weight: 600;
 }
 
-.shadow-sm {
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+.obra-card .badge {
+  font-size: .75rem;
+  text-transform: none;
+  padding: .4em .8em;
+}
+
+.progress {
+  background-color: #e9ecef;
+}
+
+.progress-bar {
+  transition: width .6s ease;
+}
+
+main {
+  flex-grow: 1;
+  background: #f8f9fa;
+}
+
+.card {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.btn-outline-secondary {
+  font-size: 0.9rem;
 }

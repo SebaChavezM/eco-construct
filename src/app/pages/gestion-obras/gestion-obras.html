@@ -1,6 +1,5 @@
-<!-- src/app/pages/gestion-obras/gestion-obras.html -->
 <div class="d-flex vh-100 overflow-hidden">
-  <!-- Sidebar -->
+
 <aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
   <div class="d-flex align-items-center mb-4">
     <i class="bi bi-leaf-fill fs-4 me-2"></i>
@@ -8,7 +7,7 @@
   </div>
 
   <nav class="nav flex-column">
-    <!-- Sección principal -->
+
     <small class="text-uppercase text-white-50 mb-2">Principal</small>
 
     <a
@@ -68,7 +67,6 @@
 
     <hr class="border-light">
 
-    <!-- Sección sistema -->
     <small class="text-uppercase text-white-50 mb-2">Sistema</small>
     <a
       routerLink="/perfil"
@@ -94,9 +92,8 @@
   </nav>
 </aside>
 
-  <!-- Main content -->
   <main class="flex-grow-1 overflow-auto p-4">
-    <!-- Header -->
+
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
         <h2 class="h4 mb-1">Gestión de Obras</h2>
@@ -104,12 +101,14 @@
           Administra y supervisa todas las obras de construcción
         </small>
       </div>
-      <button class="btn btn-success">
-        <i class="bi bi-plus-lg me-1"></i> Nueva Obra
-      </button>
+    <button
+      class="btn btn-success"
+      routerLink="/gestion-obras/nueva"
+    >
+    <i class="bi bi-plus-lg me-1"></i> Nueva Obra
+    </button>
     </div>
 
-    <!-- Lista de obras -->
     <div class="row gy-4">
       <div class="col-12" *ngFor="let obra of obras">
         <div class="card obra-card p-4 shadow-sm">

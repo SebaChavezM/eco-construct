@@ -43,30 +43,40 @@
   opacity: 0.8;
 }
 
-.table {
-  border-spacing: 0 0.5rem;
-  border-collapse: separate;
-}
-.table-light th {
-  border: none;
-}
-.table td, .table th {
-  vertical-align: middle;
-}
-.table tbody tr {
-  background: #ffffff;
-}
-.table tbody tr + tr td {
-  border-top: none;
-}
-.card-body .table {
-  margin: 0;
+.obra-card {
+  border-radius: .75rem;
 }
 
-.card-body.d-flex i {
-  opacity: 0.4;
+.obra-card h5 {
+  font-weight: 600;
 }
 
-.shadow-sm {
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05) !important;
+.obra-card .badge {
+  font-size: .75rem;
+  text-transform: none;
+  padding: .4em .8em;
+}
+
+.progress {
+  background-color: #e9ecef;
+}
+
+.progress-bar {
+  transition: width .6s ease;
+}
+
+.upload-dropzone {
+  border: 2px dashed #ced4da;
+  border-radius: .5rem;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  color: #6c757d;
+}
+.upload-dropzone:hover {
+  background-color: #f8f9fa;
+}
+
+.nav-link.active {
+  background-color: rgba(255,255,255,0.1);
 }

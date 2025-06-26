@@ -10,8 +10,8 @@ interface Obra {
   fechaInicio: string;
   fechaFin: string;
   encargado: string;
-  progreso: number; // % de progreso
-  totalResiduos: number; // en m³
+  progreso: number;
+  totalResiduos: number;
   estado: 'En progreso' | 'Finalizando';
 }
 
