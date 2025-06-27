@@ -7,6 +7,7 @@ import { NuevaObraComponent }      from './pages/gestion-obras/nueva-obra/nueva-
 import { DetallesObraComponent }   from './pages/gestion-obras/ver-detalles/ver-detalles';
 import { RegistroResiduosComponent } from './pages/registro-residuos/registro-residuos';
 import { TransporteComponent } from './pages/transporte/transporte';
+import { ReportesComponent } from './pages/reportes/reportes';
 import { PerfilComponent }         from './pages/perfil/perfil';
 import { UsuariosComponent }       from './pages/usuarios/usuarios';
 
@@ -23,6 +24,8 @@ export const routes: Routes = [
   { path: 'registro-residuos', component: RegistroResiduosComponent },
 
   { path: 'transporte', component: TransporteComponent },
+
+  { path: 'reportes', component: ReportesComponent },
 
   { path: 'perfil',                   component: PerfilComponent },
   { path: 'usuarios',                 component: UsuariosComponent },

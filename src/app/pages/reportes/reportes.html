@@ -1,0 +1,158 @@
+<div class="d-flex vh-100 overflow-hidden">
+
+<aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
+  <div class="d-flex align-items-center mb-4">
+    <i class="bi bi-leaf-fill fs-4 me-2"></i>
+    <span class="h5 mb-0">EcoConstruct</span>
+  </div>
+
+  <nav class="nav flex-column">
+
+    <small class="text-uppercase text-white-50 mb-2">Principal</small>
+
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-speedometer2 me-2"></i>
+      Dashboard
+    </a>
+
+    <a
+      routerLink="/gestion-obras"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-building me-2"></i>
+      Gestión de Obras
+    </a>
+
+    <a
+      routerLink="/registro-residuos"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-card-checklist me-2"></i>
+      Registro de Residuos
+    </a>
+
+    <a
+      routerLink="/transporte"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-truck me-2"></i>
+      Transporte
+    </a>
+
+    <a
+      routerLink="/historial-trazabilidad"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-clock-history me-2"></i>
+      Historial y Trazabilidad
+    </a>
+
+    <a
+      routerLink="/reportes"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-bar-chart me-2"></i>
+      Reportes
+    </a>
+
+    <hr class="border-light">
+
+    <small class="text-uppercase text-white-50 mb-2">Sistema</small>
+    <a
+      routerLink="/perfil"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-person-circle me-2"></i>
+      Perfil
+    </a>
+    <a
+      routerLink="/configuracion"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-gear me-2"></i>
+      Configuración
+    </a>
+          <a routerLink="/usuarios"
+         routerLinkActive="active"
+         class="nav-link text-white mt-2">
+        <i class="bi bi-people me-2"></i>Usuarios
+      </a>
+  </nav>
+</aside>
+
+  <main class="flex-grow-1 overflow-auto p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="h3 mb-1">Reportes y Análisis</h2>
+        <small class="text-muted">Genera y visualiza reportes detallados sobre la gestión de residuos</small>
+      </div>
+      <button class="btn btn-success">
+        <i class="bi bi-file-earmark-text me-1"></i> Nuevo Reporte
+      </button>
+    </div>
+
+    <div class="row gx-3 gy-3 mb-4">
+      <div class="col-12 col-md-3" *ngFor="let s of stats">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body position-relative">
+            <small class="text-muted">{{ s.label }}</small>
+            <h2 class="fw-bold mt-1">{{ s.value }}</h2>
+            <div *ngIf="s.sub" class="small text-success">{{ s.sub }}</div>
+            <i class="bi {{ s.icon }} position-absolute" style="top:1rem; right:1rem; color:#6b7280;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row gx-4 gy-4 mb-4">
+      <div class="col-12 col-lg-6">
+        <div class="card shadow-sm p-3">
+          <h5 class="card-title mb-3">Evolución Mensual de Residuos</h5>
+          <canvas #lineCanvas></canvas>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <div class="card shadow-sm p-3">
+          <h5 class="card-title mb-3">Distribución por Tipo de Residuo</h5>
+          <canvas #pieCanvas></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm p-3">
+      <h5 class="mb-3">Reportes Generados</h5>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let r of reports">
+          <div>
+            <div class="fw-bold">{{ r.title }}</div>
+            <small class="text-muted">{{ r.date }} · Tipo: {{ r.type }}</small>
+          </div>
+          <div class="d-flex align-items-center">
+            <span class="badge"
+                  [class.bg-success]="r.status==='Completado'"
+                  [class.bg-secondary]="r.status==='En proceso'"
+                  [class.bg-danger]="r.status==='Fallido'">
+              {{ r.status }}
+            </span>
+            <button class="btn btn-outline-secondary btn-sm ms-3">
+              <i class="bi bi-download"></i> Descargar
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </main>
+</div>
