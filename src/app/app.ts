@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
+// src/app/app.ts
+import { Component }    from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  selector:   'app-root',
+  standalone: true,
+  imports:    [RouterOutlet],
+  template:   `<router-outlet></router-outlet>`,
 })
-export class App {
-  protected title = 'eco-construct';
-}
+export class App {}

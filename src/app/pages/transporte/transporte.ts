@@ -1,67 +1,74 @@
-import { Component } from '@angular/core';
-import { CommonModule }  from '@angular/common';
-import { FormsModule }   from '@angular/forms';
-import { RouterModule }  from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { MatSnackBar }       from '@angular/material/snack-bar';
+import { TransporteService } from './transporte.service';
+import { CommonModule }      from '@angular/common';
+import { FormsModule }       from '@angular/forms';
+import { RouterModule }      from '@angular/router';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { HttpClientModule }           from '@angular/common/http';
+import { BrowserAnimationsModule }    from '@angular/platform-browser/animations';
 
 export interface Transporte {
-  residuo: string;
-  obra: string;
-  patente: string;
-  fechaSalida: string;
-  fechaLlegada: string;
+  residuo:       string;
+  obra:          string;
+  patente:       string;
+  fechaSalida:   string;
+  fechaLlegada:  string;
   transportista: string;
-  conductor: string;
-  guia: string;
+  conductor:     string;
+  guia:          string;
 }
 
 @Component({
   selector: 'app-transporte',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [
+    CommonModule,        // NgIf, NgFor
+    FormsModule,         // ngModel
+    RouterModule,        // routerLink
+    MatSnackBarModule    // snackbars
+  ],
   templateUrl: './transporte.html',
-  styleUrls: ['./transporte.css']
+  styleUrls:   ['./transporte.css']
 })
-export class TransporteComponent {
-
-  residuos      = ['Escombros', 'Madera', 'Metal', 'Vidrio'];
-  destinos      = ['Planta EcoMat', 'Centro Reutilización', 'Vertedero ABC'];
-  transportistas = ['Transporte X', 'Logística Y', 'Camiones Z'];
+export class TransporteComponent implements OnInit {
+  residuos       = ['Escombros','Madera','Metal','Vidrio'];
+  destinos       = ['Planta EcoMat','Centro Reutilización','Vertedero ABC'];
+  transportistas = ['Transporte X','Logística Y','Camiones Z'];
 
   nuevo: Transporte = {
-    residuo: '',
-    obra: '',
-    patente: '',
-    fechaSalida: '',
-    fechaLlegada: '',
-    transportista: '',
-    conductor: '',
-    guia: ''
+    residuo: '', obra: '', patente: '',
+    fechaSalida: '', fechaLlegada: '',
+    transportista: '', conductor: '', guia: ''
   };
+  enCurso: Transporte[] = [];
 
-  enCurso: Transporte[] = [
-    {
-      residuo: 'Escombros',
-      obra: 'Torre Residencial Norte',
-      patente: 'ABC-1234',
-      fechaSalida: '2024-01-20T14:30',
-      fechaLlegada: '2024-01-20T16:00',
-      transportista: 'Transporte X',
-      conductor: 'Carlos Mendoza',
-      guia: 'G-001'
-    },
-    {
-      residuo: 'Madera',
-      obra: 'Centro Comercial Plaza',
-      patente: 'DEF-5678',
-      fechaSalida: '2024-01-20T15:00',
-      fechaLlegada: '2024-01-20T16:30',
-      transportista: 'Logística Y',
-      conductor: 'Luis García',
-      guia: 'G-002'
-    }
-  ];
+  constructor(
+    private svc:   TransporteService,
+    private snack: MatSnackBar
+  ) {}
+
+  ngOnInit() {
+    this.load();
+  }
+
+  private load() {
+    this.svc.getTransportes().subscribe({
+      next: ts => this.enCurso = ts,
+      error: _ => this.snack.open('Error cargando transportes','Cerrar',{ duration:3000, panelClass:['snack-error'] })
+    });
+  }
 
   register() {
-    console.log('Registrando transporte', this.nuevo);
+    this.svc.createTransporte(this.nuevo).subscribe({
+      next: t => {
+        this.enCurso.unshift(t);
+        this.snack.open('Transporte registrado 🎉','Cerrar',{ duration:3000, panelClass:['snack-success'] });
+        this.nuevo = { residuo:'', obra:'', patente:'', fechaSalida:'', fechaLlegada:'', transportista:'', conductor:'', guia:'' };
+      },
+      error: _ => {
+        this.snack.open('Error al registrar transporte','Cerrar',{ duration:5000, panelClass:['snack-error'] });
+      }
+    });
   }
 }

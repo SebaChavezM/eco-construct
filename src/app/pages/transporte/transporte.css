@@ -72,3 +72,12 @@
 .card-title i {
   color: #1fa63b;
 }
+
+.snack-success {
+  background-color: #4caf50 !important;
+  color: white;
+}
+.snack-error {
+  background-color: #f44336 !important;
+  color: white;
+}
