@@ -11,24 +11,26 @@ import { ReportesComponent } from './pages/reportes/reportes';
 import { PerfilComponent }         from './pages/perfil/perfil';
 import { UsuariosComponent }       from './pages/usuarios/usuarios';
 
+import { MsalGuard } from '@azure/msal-angular';
+
 export const routes: Routes = [
   { path: '',                         redirectTo: 'login',                 pathMatch: 'full' },
   { path: 'login',                    component: LoginComponent },
-  { path: 'dashboard',                component: DashboardComponent },
+  { path: 'dashboard',                component: DashboardComponent, canActivate: [MsalGuard] },
 
-  { path: 'gestion-obras',            component: GestionObrasComponent },
-  { path: 'gestion-obras/nueva',      component: NuevaObraComponent },
-  { path: 'gestion-obras/editar/:id', component: EditarObraComponent },
-  { path: 'gestion-obras/detalles/:id', component: DetallesObraComponent },
+  { path: 'gestion-obras',            component: GestionObrasComponent, canActivate: [MsalGuard] },
+  { path: 'gestion-obras/nueva',      component: NuevaObraComponent, canActivate: [MsalGuard] },
+  { path: 'gestion-obras/editar/:id', component: EditarObraComponent, canActivate: [MsalGuard] },
+  { path: 'gestion-obras/detalles/:id', component: DetallesObraComponent, canActivate: [MsalGuard] },
 
-  { path: 'registro-residuos', component: RegistroResiduosComponent },
+  { path: 'registro-residuos', component: RegistroResiduosComponent, canActivate: [MsalGuard] },
 
-  { path: 'transporte', component: TransporteComponent },
+  { path: 'transporte', component: TransporteComponent, canActivate: [MsalGuard] },
 
-  { path: 'reportes', component: ReportesComponent },
+  { path: 'reportes', component: ReportesComponent, canActivate: [MsalGuard] },
 
-  { path: 'perfil',                   component: PerfilComponent },
-  { path: 'usuarios',                 component: UsuariosComponent },
+  { path: 'perfil',                   component: PerfilComponent, canActivate: [MsalGuard] },
+  { path: 'usuarios',                 component: UsuariosComponent, canActivate: [MsalGuard] },
 
   { path: '**',                       redirectTo: 'dashboard' }
 ];

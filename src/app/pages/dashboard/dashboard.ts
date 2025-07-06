@@ -3,6 +3,7 @@ import { ChartOptions, ChartData } from 'chart.js';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router'; 
 import { NgChartsModule } from 'ng2-charts';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -60,5 +61,12 @@ export class DashboardComponent {
     }
   };
 
-  constructor() {}
+  constructor(private http: HttpClient) {
+    this.getDatos();
+  }
+
+  getDatos() {
+    this.http.get('http://74.249.29.180:8080/api/items')
+      .subscribe(res => console.log(res));
+  }
 }

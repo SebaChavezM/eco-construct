@@ -11,25 +11,33 @@ import { App }        from './app/app';
 import { routes }     from './app/app.routes';
 import { AuthInterceptor } from './app/auth-interceptor';
 
-bootstrapApplication(App, {
-  providers: [
-    provideAnimations(),
-    provideRouter(routes),
+import { MSAL_INSTANCE, MSAL_GUARD_CONFIG, MSAL_INTERCEPTOR_CONFIG, MsalService, MsalGuard, MsalInterceptor, MsalBroadcastService } from '@azure/msal-angular';
+import { msalInstance, msalGuardConfig, msalInterceptorConfig } from './app/msal.config';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-    // módulos angular "clásicos"
-    importProvidersFrom(
-      BrowserModule,
-      FormsModule,
-      ReactiveFormsModule,
-      HttpClientModule
-    ),
+msalInstance.initialize().then(() => {
+  bootstrapApplication(App, {
+    providers: [
+      provideHttpClient(withInterceptorsFromDi()),
+      provideAnimations(),
+      provideRouter(routes),
+      {
+        provide: MSAL_INSTANCE,
+        useValue: msalInstance,
+      },
+      {
+        provide: MSAL_GUARD_CONFIG,
+        useValue: msalGuardConfig,
+      },
+      {
+        provide: MSAL_INTERCEPTOR_CONFIG,
+        useValue: msalInterceptorConfig,
+      },
+      { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
+      MsalService,
+      MsalGuard,
+      MsalBroadcastService,
+    ]
+  }).catch(err => console.error(err));
 
-    // aquí metemos el interceptor
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
-  ]
-})
-.catch(err => console.error(err));
+});

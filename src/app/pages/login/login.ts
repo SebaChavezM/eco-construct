@@ -30,4 +30,8 @@ export class LoginComponent {
   togglePassword() {
     this.showPassword = !this.showPassword;
   }
+
+  login() {
+    this.router.navigate(['/dashboard']);
+  }
 }
