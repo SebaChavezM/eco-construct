@@ -62,11 +62,7 @@ export class DashboardComponent {
   };
 
   constructor(private http: HttpClient) {
-    this.getDatos();
+    
   }
 
-  getDatos() {
-    this.http.get('http://74.249.29.180:8080/api/items')
-      .subscribe(res => console.log(res));
-  }
 }

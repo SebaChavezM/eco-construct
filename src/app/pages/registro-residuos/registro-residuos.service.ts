@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient }   from '@angular/common/http';
 import { Observable }   from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 import {
   Carrier,
@@ -11,10 +12,10 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class RegistroResiduosService {
-  private readonly carriersUrl     = 'http://74.249.29.180:8080/api/carriers';
-  private readonly itemsUrl        = 'http://74.249.29.180:8080/api/items';
-  private readonly workSitesUrl    = 'http://74.249.29.180:8080/api/worksites';
-  private readonly inventoriesUrl  = 'http://74.249.29.180:8080/api/inventories';
+  private readonly carriersUrl     = environment.apiUrl + '/api/carriers';
+  private readonly itemsUrl        = environment.apiUrl + '/api/items';
+  private readonly workSitesUrl    = environment.apiUrl + '/api/worksites';
+  private readonly inventoriesUrl  = environment.apiUrl + '/api/inventories';
 
   constructor(private http: HttpClient) {}
 
