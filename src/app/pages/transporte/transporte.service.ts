@@ -22,7 +22,7 @@ interface CarrierDto {
 
 @Injectable({ providedIn: 'root' })
 export class TransporteService {
-  private readonly baseUrl = `${environment.apiUrl}/api/carriers`;
+  private readonly baseUrl = `${environment.apiUrl}/carriers`;
 
   constructor(private http: HttpClient) {}
 

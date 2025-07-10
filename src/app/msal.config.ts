@@ -21,6 +21,6 @@ export const msalGuardConfig: MsalGuardConfiguration = {
 export const msalInterceptorConfig: MsalInterceptorConfiguration = {
   interactionType: InteractionType.Redirect,
   protectedResourceMap: new Map([
-    [`${environment.apiUrl}/api`, ['https://pinoliso.onmicrosoft.com/api/user.read']],
+    [`${environment.apiUrl}`, ['https://pinoliso.onmicrosoft.com/api/user.read']],
   ]),
 };
