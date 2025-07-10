@@ -112,6 +112,34 @@
 
         <form [formGroup]="form" (ngSubmit)="register()">
           <div class="row g-3">
+
+            <div class="col-md-6">
+              <label class="form-label">N° de Servicio</label>
+              <input
+                type="text"
+                class="form-control"
+                [value]="numeroServicio"
+                readonly
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Transportista</label>
+              <select
+                class="form-select"
+                formControlName="transportista"
+                [class.is-invalid]="form.get('transportista')!.touched && form.get('transportista')!.invalid"
+              >
+                <option value="" disabled>Selecciona transportista</option>
+                <option *ngFor="let t of transportistas" [value]="t">{{ t }}</option>
+              </select>
+              <div
+                *ngIf="form.get('transportista')!.touched && form.get('transportista')!.hasError('required')"
+                class="invalid-feedback"
+              >
+                Debes seleccionar un transportista
+              </div>
+            </div>
             
             <div class="col-md-6">
               <label class="form-label">Residuo a Transportar</label>
@@ -132,25 +160,7 @@
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">Transportista</label>
-              <select
-                class="form-select"
-                formControlName="transportista"
-                [class.is-invalid]="form.get('transportista')!.touched && form.get('transportista')!.invalid"
-              >
-                <option value="" disabled>Selecciona transportista</option>
-                <option *ngFor="let t of transportistas" [value]="t">{{ t }}</option>
-              </select>
-              <div
-                *ngIf="form.get('transportista')!.touched && form.get('transportista')!.hasError('required')"
-                class="invalid-feedback"
-              >
-                Debes seleccionar un transportista
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Destino Final</label>
+              <label class="form-label">Lugar de retiro</label>
               <select
                 class="form-select"
                 formControlName="obra"
@@ -277,41 +287,136 @@
       </div>
     </div>
 
-    <div class="card shadow-sm">
+    <div class="transportes-en-curso p-4">
+    <h5 class="heading mb-1">Transportes en Curso</h5>
+    <p class="subheading text-muted mb-4">Estado actual de los transportes registrados</p>
+
+    <div *ngFor="let t of enCurso" class="card transporte-card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center bg-white">
+        <strong class="transporte-title">{{ t.residuo }} – {{ t.patente }}</strong>
+        <span class="badge status-badge">{{ t.estadoTexto }}</span>
+      </div>
       <div class="card-body">
-        <h5 class="card-title mb-4">Transportes en Curso</h5>
-        <ul class="list-unstyled mb-0">
-          <li *ngFor="let t of enCurso" class="mb-4">
-            <div class="d-flex justify-content-between align-items-center flex-wrap">
-              <div>
-                <strong>{{ t.residuo }} – {{ t.patent || t.patente }}</strong>
-                <div class="text-muted small">
-                  {{ t.destiny || t.obra }} → {{ t.carrier || t.transportista }}
-                </div>
-              </div>
-              <span class="badge bg-success">En tránsito</span>
+        <div class="row info-row align-items-center mb-3">
+          <div class="col info-item d-flex align-items-center">
+            <i class="bi bi-geo-alt-fill me-2 fs-5 text-success"></i>
+            <div>
+              <small class="label text-uppercase text-secondary">Destino</small><br>
+              <span class="info-text">{{ t.destino }}</span>
             </div>
-            <div class="row mt-2 g-3 align-items-center">
-              <div class="col-auto">
-                <i class="bi bi-person me-1"></i><small>{{ t.driver || t.conductor }}</small>
-              </div>
-              <div class="col-auto">
-                <i class="bi bi-clock me-1"></i>
-                <small>Salida {{ t.departureTime | date:'HH:mm' }}</small>
-              </div>
-              <div class="col-auto">
-                <i class="bi bi-clock-history me-1"></i>
-                <small>ETA {{ t.arrivalTime | date:'HH:mm' }}</small>
-              </div>
-              <div class="col text-end">
-                <button class="btn btn-outline-secondary btn-sm me-2">Ver Detalle</button>
-                <button class="btn btn-outline-secondary btn-sm">Rastrear</button>
-              </div>
+          </div>
+          <div class="col info-item d-flex align-items-center">
+            <i class="bi bi-truck-front-fill me-2 fs-5 text-success"></i>
+            <div>
+              <small class="label text-uppercase text-secondary">Transportista</small><br>
+              <span class="info-text">{{ t.transportista }}</span>
             </div>
-          </li>
-        </ul>
+          </div>
+          <div class="col info-item d-flex align-items-center">
+            <i class="bi bi-person-fill me-2 fs-5 text-success"></i>
+            <div>
+              <small class="label text-uppercase text-secondary">Conductor</small><br>
+              <span class="info-text">{{ t.conductor }}</span>
+            </div>
+          </div>
+          <div class="col-auto info-item text-center">
+            <i class="bi bi-clock me-1 fs-5 text-success"></i><br>
+            <small class="label text-uppercase text-secondary">Salida</small><br>
+            <span class="info-text">{{ t.fechaSalida | date:'HH:mm' }}</span>
+          </div>
+          <div class="col-auto info-item text-center">
+            <i class="bi bi-clock-history me-1 fs-5 text-success"></i><br>
+            <small class="label text-uppercase text-secondary">ETA</small><br>
+            <span class="info-text">{{ t.fechaLlegada | date:'HH:mm' }}</span>
+          </div>
+        </div>
+
+        <div class="actions text-end mt-2">
+          <button class="btn btn-success btn-sm me-2" (click)="openDetalle(t)">
+            Ver Detalle
+          </button>
+          <button class="btn btn-outline-secondary btn-sm">Rastrear</button>
+        </div>
       </div>
     </div>
+  </div>
 
-  </main>
-</div>
+  <!-- ======= Modal Bootstrap Manual ======= -->
+  <div
+    class="modal fade"
+    [class.show]="showDetalleModal"
+    [style.display]="showDetalleModal ? 'block' : 'none'"
+    tabindex="-1"
+    role="dialog"
+  >
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-truck me-2 text-success"></i>
+            Detalle del Transporte #{{ numeroServicio - 1 }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeDetalle()"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Copia aquí el contenido que quieres mostrar,
+               usando selectedTransport.* -->
+          <h6>Información del Residuo</h6>
+          <p><strong>{{ selectedTransport?.residuo }}</strong></p>
+
+          <hr>
+
+          <h6>Ruta de Transporte</h6>
+          <p><i class="bi bi-geo-alt-fill text-success me-1"></i>
+            <strong>Origen:</strong> Torre Residencial Norte
+          </p>
+          <p><i class="bi bi-geo-alt text-danger me-1"></i>
+            <strong>Destino:</strong> {{ selectedTransport?.destino }}
+          </p>
+
+          <hr>
+
+          <h6>Información del Vehículo</h6>
+          <div class="row">
+            <div class="col">
+              <p><i class="bi bi-person-fill text-success me-1"></i>
+                <strong>Conductor:</strong> {{ selectedTransport?.conductor }}
+              </p>
+            </div>
+            <div class="col">
+              <p><i class="bi bi-card-text text-success me-1"></i>
+                <strong>Patente:</strong> {{ selectedTransport?.patente }}
+              </p>
+            </div>
+          </div>
+
+          <hr>
+
+          <h6>Horarios</h6>
+          <div class="row">
+            <div class="col">
+              <p><i class="bi bi-clock text-success me-1"></i>
+                <strong>Hora de Salida:</strong>
+                {{ selectedTransport?.fechaSalida | date:'HH:mm' }}
+              </p>
+            </div>
+            <div class="col">
+              <p><i class="bi bi-clock-history text-success me-1"></i>
+                <strong>ETA:</strong>
+                {{ selectedTransport?.fechaLlegada | date:'HH:mm' }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary btn-sm" (click)="closeDetalle()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- fondo oscuro -->
+  <div
+    class="modal-backdrop fade"
+    [class.show]="showDetalleModal"
+    *ngIf="showDetalleModal"
+  ></div>

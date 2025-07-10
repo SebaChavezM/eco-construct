@@ -1,10 +1,13 @@
 export interface Transporte {
   residuo:        string;
-  obra:           string;
+  cantidad:       number;
+  origen:         string;
+  destino:        string;
   patente:        string;
   fechaSalida:    string;
   fechaLlegada:   string;
   transportista:  string;
   conductor:      string;
   guia:           string;
+  estadoTexto:    string;
 }

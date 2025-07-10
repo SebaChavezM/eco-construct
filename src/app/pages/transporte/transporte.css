@@ -1,3 +1,6 @@
+/* ======================
+   Sidebar & Navegación
+   ====================== */
 .sidebar {
   width: 240px;
   background-color: #16a249;
@@ -38,41 +41,42 @@
   text-decoration: none;
   transition: opacity .2s;
 }
-.nav-link.active,
-.nav-link:hover {
+.nav-link:hover,
+.nav-link.active {
   opacity: 0.8;
 }
+.nav-link.active {
+  background-color: rgba(255,255,255,0.1);
+}
 
+/* ======================
+   Obra Card
+   ====================== */
 .obra-card {
   border-radius: .75rem;
 }
-
 .obra-card h5 {
   font-weight: 600;
 }
-
 .obra-card .badge {
   font-size: .75rem;
   text-transform: none;
   padding: .4em .8em;
 }
 
+/* ======================
+   Progress Bar
+   ====================== */
 .progress {
   background-color: #e9ecef;
 }
-
 .progress-bar {
   transition: width .6s ease;
 }
 
-.nav-link.active {
-  background-color: rgba(255,255,255,0.1);
-}
-
-.card-title i {
-  color: #1fa63b;
-}
-
+/* ======================
+   Snackbars
+   ====================== */
 .snack-success {
   background-color: #4caf50 !important;
   color: white;
@@ -80,4 +84,127 @@
 .snack-error {
   background-color: #f44336 !important;
   color: white;
+}
+
+/* ======================
+   Íconos en Títulos
+   ====================== */
+.card-title i {
+  color: #1fa63b;
+}
+
+/* ======================
+   Transportes en Curso
+   ====================== */
+.transportes-en-curso {
+  margin: 2rem auto;
+  padding: 0 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.75rem;
+}
+.transportes-en-curso .heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.transportes-en-curso .subheading {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.transporte-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+.transporte-card .card-header {
+  background: #fff;
+  border-bottom: none;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.transporte-title {
+  font-size: 1.125rem;
+  color: #212529;
+}
+.status-badge {
+  background: #28a745;
+  color: #fff;
+  padding: 0.35em 0.75em;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  text-transform: none;
+}
+
+.transporte-card .card-body {
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.info-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -0.5rem;
+}
+.info-item {
+  flex: 1 1 200px;
+  display: flex;
+  align-items: flex-start;
+  padding: 0.5rem;
+}
+.info-item i {
+  font-size: 1.2rem;
+  color: #0d6efd;
+  margin-right: 0.5rem;
+}
+.info-item .label {
+  color: #6c757d;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+.info-item .info-text {
+  font-size: 0.95rem;
+  color: #212529;
+  display: block;
+  margin-top: 0.1rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+.actions .btn {
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  min-width: 100px;
+}
+
+.transporte-card .card-body {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.info-row {
+  margin: -0.25rem;
+}
+
+.info-item {
+  padding: 0.25rem;
+}
+
+.info-item + .info-item {
+  margin-left: 7rem;
+}
+
+.info-item i {
+  color: #28a745 !important;
+  margin-right: 0.4rem;
+}
+
+.col-auto.info-item {
+  flex: 0 0 auto;
+  width: auto;
 }
