@@ -12,10 +12,10 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class RegistroResiduosService {
-  private readonly carriersUrl     = environment.apiUrl + '/api/carriers';
-  private readonly itemsUrl        = environment.apiUrl + '/api/items';
-  private readonly workSitesUrl    = environment.apiUrl + '/api/worksites';
-  private readonly inventoriesUrl  = environment.apiUrl + '/api/inventories';
+  private readonly carriersUrl     = `${environment.apiUrl}/api/carriers`;
+  private readonly itemsUrl        = `${environment.apiUrl}/api/items`;
+  private readonly workSitesUrl    = `${environment.apiUrl}/api/worksites`;
+  private readonly inventoriesUrl  = `${environment.apiUrl}/api/inventories`;
 
   constructor(private http: HttpClient) {}
 
