@@ -125,55 +125,66 @@
 
             <div class="col-md-6">
               <label class="form-label">Transportista</label>
-              <select
-                class="form-select"
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Nombre del transportista"
                 formControlName="transportista"
-                [class.is-invalid]="form.get('transportista')!.touched && form.get('transportista')!.invalid"
-              >
-                <option value="" disabled>Selecciona transportista</option>
-                <option *ngFor="let t of transportistas" [value]="t">{{ t }}</option>
-              </select>
+                [class.is-invalid]="
+                  form.get('transportista')!.touched &&
+                  form.get('transportista')!.invalid
+                "
+              />
               <div
-                *ngIf="form.get('transportista')!.touched && form.get('transportista')!.hasError('required')"
+                *ngIf="
+                  form.get('transportista')!.touched &&
+                  form.get('transportista')!.hasError('required')
+                "
                 class="invalid-feedback"
               >
-                Debes seleccionar un transportista
+                Debes ingresar un transportista
               </div>
             </div>
             
             <div class="col-md-6">
               <label class="form-label">Residuo a Transportar</label>
-              <select
-                class="form-select"
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Tipo de residuo"
                 formControlName="residuo"
-                [class.is-invalid]="form.get('residuo')!.touched && form.get('residuo')!.invalid"
-              >
-                <option value="" disabled>Selecciona el residuo</option>
-                <option *ngFor="let r of residuos" [value]="r">{{ r }}</option>
-              </select>
+                [class.is-invalid]="
+                  form.get('residuo')!.touched && form.get('residuo')!.invalid
+                "
+              />
               <div
-                *ngIf="form.get('residuo')!.touched && form.get('residuo')!.hasError('required')"
+                *ngIf="
+                  form.get('residuo')!.touched && form.get('residuo')!.hasError('required')
+                "
                 class="invalid-feedback"
               >
-                Debes seleccionar un residuo
+                Debes ingresar un residuo
               </div>
             </div>
 
             <div class="col-md-6">
-              <label class="form-label">Lugar de retiro</label>
-              <select
-                class="form-select"
+              <label class="form-label">Lugar de Retiro</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Ubicación de retiro"
                 formControlName="obra"
-                [class.is-invalid]="form.get('obra')!.touched && form.get('obra')!.invalid"
-              >
-                <option value="" disabled>Selecciona destino</option>
-                <option *ngFor="let d of destinos" [value]="d">{{ d }}</option>
-              </select>
+                [class.is-invalid]="
+                  form.get('obra')!.touched && form.get('obra')!.invalid
+                "
+              />
               <div
-                *ngIf="form.get('obra')!.touched && form.get('obra')!.hasError('required')"
+                *ngIf="
+                  form.get('obra')!.touched && form.get('obra')!.hasError('required')
+                "
                 class="invalid-feedback"
               >
-                Debes seleccionar un destino
+                Debes ingresar el lugar de retiro
               </div>
             </div>
 
@@ -340,103 +351,93 @@
     </div>
   </div>
 
-<!-- ======= Modal Bootstrap Manual ======= -->
-<div
-  class="modal fade"
-  [class.show]="showDetalleModal"
-  [style.display]="showDetalleModal ? 'block' : 'none'"
-  tabindex="-1"
-  role="dialog"
->
-  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
-    <div class="modal-content">
+  <div
+    class="modal fade"
+    [class.show]="showDetalleModal"
+    [style.display]="showDetalleModal ? 'block' : 'none'"
+    tabindex="-1"
+    role="dialog"
+  >
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-content">
 
-      <!-- Cabecera -->
-      <div class="modal-header border-0">
-        <h5 class="modal-title">
-          <i class="bi bi-truck-front-fill me-2 text-success fs-4"></i>
-          Detalle del Transporte #{{ numeroServicio - 1 }}
-        </h5>
-        <button type="button" class="btn-close" (click)="closeDetalle()"></button>
-      </div>
-
-      <!-- Estado Actual -->
-      <div class="estado-container px-4 mb-2 d-flex justify-content-between align-items-center">
-        <h6 class="fw-semibold mb-0">Estado Actual</h6>
-        <span class="badge status-badge">En tránsito</span>
-      </div>
-      <hr class="mx-4 my-2">
-
-      <div class="modal-body px-4 pb-4">
-
-        <!-- Información del Residuo -->
-        <h6 class="fw-semibold mb-2">Información del Residuo</h6>
-        <p class="mb-0">
-          <strong>{{ selectedTransport?.residuo }} – {{ selectedTransport?.cantidad }} m³</strong>
-        </p>
-        <p class="text-secondary small mb-0">Tipo: {{ selectedTransport?.residuo }}</p>
-        <hr>
-
-        <!-- Ruta de Transporte -->
-        <h6 class="fw-semibold mb-2">Ruta de Transporte</h6>
-        <p class="mb-1">
-          <i class="bi bi-geo-alt-fill text-success me-1 fs-5"></i>
-          <strong>Origen:</strong> Bodegas de EcoConstruct
-        </p>
-        <p class="mb-0">
-          <i class="bi bi-geo-alt text-danger me-1 fs-5"></i>
-          <strong>Destino:</strong> {{ selectedTransport?.destino }}
-        </p>
-        <hr>
-
-        <!-- Información del Vehículo -->
-        <h6 class="fw-semibold mb-2">Información del Vehículo</h6>
-        <div class="row g-3 mb-3">
-          <div class="col-md-6">
-            <p class="mb-0">
-              <i class="bi bi-person-fill text-success me-1 fs-5"></i>
-              <strong>Conductor:</strong> {{ selectedTransport?.conductor }}
-            </p>
-          </div>
-          <div class="col-md-6">
-            <p class="mb-0">
-              <i class="bi bi-card-text text-success me-1 fs-5"></i>
-              <strong>Patente:</strong> {{ selectedTransport?.patente }}
-            </p>
-          </div>
-        </div>
-        <hr>
-
-        <!-- Horarios -->
-        <h6 class="fw-semibold mb-2">Horarios</h6>
-        <div class="row g-3">
-          <div class="col-md-6">
-            <p class="mb-0">
-              <i class="bi bi-clock text-success me-1 fs-5"></i>
-              <strong>Hora de Salida:</strong>
-              {{ selectedTransport?.fechaSalida | date:'HH:mm' }}
-            </p>
-          </div>
-          <div class="col-md-6">
-            <p class="mb-0">
-              <i class="bi bi-clock-history text-success me-1 fs-5"></i>
-              <strong>ETA:</strong>
-              {{ selectedTransport?.fechaLlegada | date:'HH:mm' }}
-            </p>
-          </div>
+        <div class="modal-header border-0">
+          <h5 class="modal-title">
+            <i class="bi bi-truck-front-fill me-2 text-success fs-4"></i>
+            Detalle del Transporte #{{ numeroServicio - 1 }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeDetalle()"></button>
         </div>
 
-      </div>
+        <div class="estado-container px-4 mb-2 d-flex justify-content-between align-items-center">
+          <h6 class="fw-semibold mb-0">Estado Actual</h6>
+          <span class="badge status-badge">En tránsito</span>
+        </div>
+        <hr class="mx-4 my-2">
 
-      <!-- Pie de modal -->
-      <div class="modal-footer border-0 px-4 pb-3">
-        <button type="button" class="btn btn-success" (click)="closeDetalle()">Cerrar</button>
-        <button type="button" class="btn btn-warning">Editar</button>
-      </div>
+        <div class="modal-body px-4 pb-4">
 
-    </div>
+          <h6 class="fw-semibold mb-2">Información del Residuo</h6>
+          <p class="mb-0">
+            <strong>{{ selectedTransport?.residuo }} – {{ selectedTransport?.cantidad }} m³</strong>
+          </p>
+          <p class="text-secondary small mb-0">Tipo: {{ selectedTransport?.residuo }}</p>
+          <hr>
+
+          <h6 class="fw-semibold mb-2">Ruta de Transporte</h6>
+          <p class="mb-1">
+            <i class="bi bi-geo-alt-fill text-success me-1 fs-5"></i>
+            <strong>Origen:</strong> Bodegas de EcoConstruct
+          </p>
+          <p class="mb-0">
+            <i class="bi bi-geo-alt text-danger me-1 fs-5"></i>
+            <strong>Destino:</strong> {{ selectedTransport?.destino }}
+          </p>
+          <hr>
+
+          <h6 class="fw-semibold mb-2">Información del Vehículo</h6>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-person-fill text-success me-1 fs-5"></i>
+                <strong>Conductor:</strong> {{ selectedTransport?.conductor }}
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-card-text text-success me-1 fs-5"></i>
+                <strong>Patente:</strong> {{ selectedTransport?.patente }}
+              </p>
+            </div>
+          </div>
+          <hr>
+
+          <h6 class="fw-semibold mb-2">Horarios</h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-clock text-success me-1 fs-5"></i>
+                <strong>Hora de Salida:</strong>
+                {{ selectedTransport?.fechaSalida | date:'HH:mm' }}
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-clock-history text-success me-1 fs-5"></i>
+                <strong>ETA:</strong>
+                {{ selectedTransport?.fechaLlegada | date:'HH:mm' }}
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer border-0 px-4 pb-3">
+          <button type="button" class="btn btn-success" (click)="closeDetalle()">Cerrar</button>
+          <button type="button" class="btn btn-warning">Editar</button>
+        </div>
+      </div>
   </div>
-</div>
 
   <!-- fondo oscuro -->
   <div class="modal-backdrop fade" [class.show]="showDetalleModal" *ngIf="showDetalleModal">

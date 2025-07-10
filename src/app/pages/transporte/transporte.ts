@@ -22,13 +22,8 @@ import { Transporte }        from './transporte.model';
   styleUrls:   ['./transporte.css']
 })
 export class TransporteComponent implements OnInit {
-  residuos       = ['Escombros','Madera','Metal','Vidrio'];
-  destinos       = ['Planta EcoMat','Centro Reutilización','Vertedero ABC'];
-  transportistas = ['Transporte X','Logística Y','Camiones Z'];
-
   form: FormGroup;
 
-  // Dummy inicial
   enCurso: Transporte[] = [
     {
       residuo:       'Madera',
@@ -47,7 +42,6 @@ export class TransporteComponent implements OnInit {
 
   numeroServicio = this.enCurso.length + 1;
 
-  // Para controlar el modal Bootstrap
   showDetalleModal = false;
   selectedTransport?: Transporte;
 
@@ -57,8 +51,8 @@ export class TransporteComponent implements OnInit {
     private snack: MatSnackBar,
   ) {
     this.form = this.fb.group({
-      residuo:       ['', Validators.required],
       transportista: ['', Validators.required],
+      residuo:       ['', Validators.required],
       obra:          ['', Validators.required],
       conductor:     ['', [Validators.required, Validators.minLength(3)]],
       patente:       ['', [Validators.required, Validators.pattern(/^[A-Z0-9\-]{4,10}$/)]],

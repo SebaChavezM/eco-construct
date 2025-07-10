@@ -6,7 +6,6 @@ import { Transporte } from './transporte.model';
 import { environment } from '../../../environments/environment';
 
 interface CarrierDto {
-  // ...
   carrier:        string;
   destiny:        string;
   driver:         string;
