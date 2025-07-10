@@ -208,3 +208,58 @@
   flex: 0 0 auto;
   width: auto;
 }
+
+/* ======================
+   Modal Detalle Transporte
+   ====================== */
+.modal-header {
+  padding-bottom: 0.5rem;
+}
+
+.modal-header .modal-title {
+  font-weight: 600;
+}
+
+.modal-header .modal-title i {
+  color: #28a745;              /* icono verde */
+}
+
+.modal-body h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body p {
+  margin-bottom: 0.25rem;
+}
+
+.modal-body hr {
+  margin: 0.75rem 0;
+  border-color: #e9ecef;
+}
+
+.bi.text-success {
+  color: #28a745 !important;   /* iconos verdes */
+}
+
+.status-badge {
+  background: #28a745;
+  color: #fff;
+  padding: 0.35em 0.75em;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.modal-footer {
+  padding-top: 0.5rem;
+  padding-bottom: 0;
+}
+
+.modal-footer .btn-success {
+  min-width: 100px;
+}
+
