@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map }        from 'rxjs/operators';
 import { Transporte } from './transporte.model';
+import { environment } from '../../../environments/environment';
 
 interface CarrierDto {
   id: number;
@@ -21,7 +22,7 @@ interface CarrierDto {
 
 @Injectable({ providedIn: 'root' })
 export class TransporteService {
-  private readonly baseUrl = 'http://74.249.29.180:8080/api/carriers';
+  private readonly baseUrl = `${environment.apiUrl}/api/carriers`;
 
   constructor(private http: HttpClient) {}
 
