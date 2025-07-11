@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ToastrService } from 'ngx-toastr';
 
 import { TransporteService } from './transporte.service';
 import { Transporte }        from './transporte.model';
@@ -16,10 +16,9 @@ import { Transporte }        from './transporte.model';
     DatePipe,
     ReactiveFormsModule,
     RouterModule,
-    MatSnackBarModule
   ],
   templateUrl: './transporte.html',
-  styleUrls:   ['./transporte.css']
+  styleUrls: ['./transporte.css']
 })
 export class TransporteComponent implements OnInit {
   form: FormGroup;
@@ -48,7 +47,7 @@ export class TransporteComponent implements OnInit {
   constructor(
     private fb:    FormBuilder,
     private svc:   TransporteService,
-    private snack: MatSnackBar,
+    private toastr: ToastrService
   ) {
     this.form = this.fb.group({
       transportista: ['', Validators.required],
@@ -68,41 +67,47 @@ export class TransporteComponent implements OnInit {
 
   private load() {
     this.svc.getTransportes().subscribe({
-      next: ts => {
-        this.enCurso = ts;
+      next: transports => {
+        this.enCurso = transports;
         this.numeroServicio = this.enCurso.length + 1;
       },
-      error: _ => this.snack.open('Error cargando transportes','Cerrar',{ duration:3000, panelClass:['snack-error'] })
+      error: () => {
+        this.toastr.error('Error cargando transportes', 'Error');
+      }
     });
   }
 
   register() {
     if (this.form.invalid) {
-      this.snack.open('Revisa los campos obligatorios','Cerrar',{ duration:3000, panelClass:['snack-error'] });
+      this.toastr.error('Revisa los campos obligatorios', 'Validación');
       this.form.markAllAsTouched();
       return;
     }
+
     const payload: Transporte = {
       ...this.form.value,
-      cantidad:     0,                                 
+      cantidad:     0,
       origen:       'Torre Residencial Norte',
       destino:      this.form.value.obra,
       estadoTexto:  'En tránsito'
     };
+
     this.svc.createTransporte(payload).subscribe({
       next: nuevo => {
         this.enCurso.unshift(nuevo);
         this.numeroServicio = this.enCurso.length + 1;
-        this.snack.open('Transporte registrado','Cerrar',{ duration:3000, panelClass:['snack-success'] });
+        this.toastr.success('Transporte registrado', '¡Listo!');
         this.form.reset();
       },
-      error: _ => this.snack.open('Error al registrar transporte','Cerrar',{ duration:5000, panelClass:['snack-error'] })
+      error: () => {
+        this.toastr.error('Error al registrar transporte', 'Error');
+      }
     });
   }
 
   openDetalle(t: Transporte) {
     this.selectedTransport = t;
-    this.showDetalleModal     = true;
+    this.showDetalleModal = true;
   }
 
   closeDetalle() {
