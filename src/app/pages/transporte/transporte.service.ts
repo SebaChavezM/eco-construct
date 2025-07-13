@@ -36,7 +36,7 @@ export class TransporteService {
       id: c.id,
       residuo: firstItem?.item.name ?? 'Desconocido',
       cantidad: firstItem?.quantity ?? 0,
-      origen: 'Torre Residencial Norte',
+      origen: 'Bodegas EcoConstruct',
       destino: c.destiny,
       patente: c.patent,
       fechaSalida: c.departureTime,

@@ -112,69 +112,85 @@
         </small>
 
         <div class="row g-3">
-          <!-- Tipo de Residuo -->
+          <!-- Servicio de Transporte -->
           <div class="col-md-6">
-            <label class="form-label">Tipo de Residuo</label>
+            <label class="form-label">Servicio de Transporte</label>
             <select
               class="form-select"
-              name="tipoId"
-              [(ngModel)]="registro.items[0].item.id"
-              (ngModelChange)="onTipoYCantidadChange()"
-              required
+              [(ngModel)]="servicioSeleccionado"
+              (ngModelChange)="onSeleccionServicio()"
             >
-              <option [ngValue]="0" disabled>Selecciona el tipo</option>
-              <option *ngFor="let t of tipos" [ngValue]="t.id">
-                {{ t.name }}
+              <option [ngValue]="0" disabled>Selecciona el servicio</option>
+              <option *ngFor="let tr of transportes" [ngValue]="tr.id">
+                Servicio N°{{ tr.id }}
               </option>
             </select>
+          </div>
+
+          <!-- Tipo de Residuo (deshabilitado) -->
+          <div class="col-md-6">
+            <label class="form-label">Tipo de Residuo</label>
+            <input type="text" class="form-control" [value]="tipoResiduoSeleccionado" disabled />
           </div>
 
           <!-- Cantidad -->
-          <div class="col-md-3">
+          <div class="col-md-6">
             <label class="form-label">Cantidad</label>
-            <div class="input-group">
-              <input
-                type="number"
-                class="form-control"
-                name="quantity"
-                [(ngModel)]="registro.items[0].quantity"
-                (ngModelChange)="onTipoYCantidadChange()"
-                min="0"
-                required
-              />
-            </div>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="registro.items[0].quantity"
+              min="0"
+              required
+            />
+          </div>
+
+          <!-- Unidad de medida -->
+          <div class="col-md-6">
+            <label class="form-label">Unidad de Medida</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="unidadSeleccionada"
+              placeholder="Ej: m³, kg, etc."
+            />
           </div>
 
           <!-- Obra Asociada -->
-          <div class="col-md-3">
+          <div class="col-md-6">
             <label class="form-label">Obra Asociada</label>
             <select
               class="form-select"
-              name="workSiteId"
               [(ngModel)]="registro.workSiteId"
-              required
+              name="obra"
             >
-              <option [ngValue]="0" disabled>Selecciona la obra</option>
-              <option *ngFor="let o of obras" [ngValue]="o.id">
-                {{ o.name }}
-              </option>
+              <option value="0" disabled selected>Selecciona una obra</option>
+              <option *ngFor="let obra of obras" [value]="obra.id">{{ obra.name }}</option>
             </select>
           </div>
 
-          <!-- Responsable -->
+          <!-- Responsable (deshabilitado) -->
           <div class="col-md-6">
             <label class="form-label">Responsable</label>
-            <select
-              class="form-select"
-              name="carrierId"
-              [(ngModel)]="registro.carrierId"
-              required
-            >
-              <option [ngValue]="0" disabled>Selecciona el responsable</option>
-              <option *ngFor="let c of responsables" [ngValue]="c.id">
-                {{ c.carrier }}
-              </option>
-            </select>
+            <input type="text" class="form-control" [value]="responsableNombreSeleccionado" disabled />
+          </div>
+
+          <!-- Conductor -->
+          <div class="col-md-6">
+            <label class="form-label">Conductor</label>
+            <input type="text" class="form-control" [value]="conductorSeleccionado" disabled />
+          </div>
+
+          <!-- Patente -->
+          <div class="col-md-6">
+            <label class="form-label">Patente</label>
+            <input type="text" class="form-control" [value]="patenteSeleccionada" disabled />
+          </div>
+
+          <!-- Guía -->
+          <div class="col-md-6">
+            <label class="form-label">N° Guía</label>
+            <input type="text" class="form-control" [value]="guiaSeleccionada" disabled />
           </div>
 
           <!-- Observaciones -->
@@ -182,7 +198,6 @@
             <label class="form-label">Observaciones</label>
             <textarea
               class="form-control"
-              name="comments"
               rows="3"
               placeholder="Descripción adicional…"
               [(ngModel)]="registro.comments"
@@ -232,17 +247,49 @@
     <!-- Lista de recientes -->
     <div class="card shadow-sm">
       <div class="card-body">
-        <h5 class="card-title mb-4">Residuos Registrados Recientemente</h5>
+        <h5 class="card-title mb-1">Residuos Registrados Recientemente</h5>
+        <p class="text-muted mb-4 small">Últimos registros de residuos en el sistema</p>
         <ul class="list-unstyled mb-0">
-          <li *ngFor="let r of recientes" class="mb-4">
-            <div *ngIf="r.items?.length" class="d-flex justify-content-between">
-              <div>
+          <li *ngFor="let registro of recientes" class="mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <div class="bg-light rounded-circle p-3 me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                  <i class="bi bi-box-seam fs-3 text-success"></i>
+                </div>
+                <div>
+                  <div class="fw-bold">
+                    {{
+                      obtenerNombreTipo(registro.items[0]?.item?.id) || 'Tipo desconocido'
+                    }} -
+                    {{
+                      registro.items[0]?.quantity ?? '?'
+                    }}
+                    {{
+                      obtenerUnidadPorTipo(registro.items[0]?.item?.id)
+                    }}
+                  </div>
+
+                  <div class="text-muted small">
+                    {{
+                      obtenerNombreObra(registro.workSiteId)
+                    }} • {{
+                      obtenerNombreResponsable(registro.carrierId)
+                    }}
+                  </div>
+
+                  <!-- Comentarios -->
+                  <div class="text-muted small" *ngIf="registro.comments">
+                    {{ registro.comments }}
+                  </div>
+                </div>
               </div>
               <div class="text-end">
-                <small class="text-muted">{{ r.comments }}</small>
+                <span class="badge bg-light text-dark border">Registrado</span>
+                <br />
+                <a href="#" class="small text-decoration-underline">Ver</a>
               </div>
             </div>
-            <hr>
+            <hr *ngIf="registro !== recientes[recientes.length - 1]" />
           </li>
         </ul>
       </div>

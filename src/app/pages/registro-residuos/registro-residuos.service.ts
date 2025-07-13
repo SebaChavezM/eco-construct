@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient }   from '@angular/common/http';
 import { Observable }   from 'rxjs';
+import { Transporte } from './registro-residuos.model';
 import { environment } from '../../../environments/environment';
 
 import {
@@ -31,14 +32,40 @@ export class RegistroResiduosService {
     return this.http.get<WorkSite[]>(this.workSitesUrl);
   }
 
-  createRegistro(registro: RegistroResiduos): Observable<any> {
+  getTransportes(): Observable<Transporte[]> {
+    return this.http.get<Transporte[]>(`${environment.apiUrl}/carriers`);
+  }
+
+  createRegistro(registro: RegistroResiduos,
+                conductor: string,
+                responsable: string,
+                patente: string,
+                guia: string,
+                unidad: string): Observable<any> {
     const payload = {
       workSite:        { id: registro.workSiteId },
       inventoryStatus: { id: registro.inventoryStatusId },
       carrier:         { id: registro.carrierId },
+      transporte:      registro.transporteId ? { id: registro.transporteId } : undefined,
       comments:        registro.comments,
-      items:           registro.items
+      conductor,
+      responsable,
+      patente,
+      guia,
+      items: registro.items.map(i => ({
+        item: { id: i.item.id },
+        quantity: i.quantity,
+        unit: unidad
+      }))
     };
+
+    console.log('Payload enviado al backend:', payload);
+
     return this.http.post(this.inventoriesUrl, payload);
   }
+
+  getRegistros(): Observable<RegistroResiduos[]> {
+    return this.http.get<RegistroResiduos[]>(this.inventoriesUrl);
+  }
+
 }

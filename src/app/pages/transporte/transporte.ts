@@ -24,22 +24,7 @@ import { Residuo } from './residuo.model';
 
 export class TransporteComponent implements OnInit {
   form: FormGroup;
-  enCurso: Transporte[] = [
-    {
-      id: 1,
-      residuo: 'Madera',
-      cantidad: 8.2,
-      origen: 'Centro Comercial Plaza',
-      destino: 'Centro de Reutilización',
-      patente: 'DEF-5678',
-      fechaSalida: '2025-07-10T15:00',
-      fechaLlegada: '2025-07-10T16:30',
-      transportista: 'Logística Y',
-      conductor: 'Luis García',
-      guia: 'TRK-0002',
-      estadoTexto: 'Cargando'
-    }
-  ];
+  enCurso: Transporte[] = [];
 
   numeroServicio = this.enCurso.length + 1;
   residuos: Residuo[] = [];
@@ -98,14 +83,14 @@ register() {
   const payload: any = {
     ...this.form.value,
     cantidad: 0,
-    origen: 'Torre Residencial Norte',
+    origen: 'Bodegas EcoConstruct',
     destino: this.form.value.obra,
     estadoTexto: 'En tránsito',
     items: [
       {
         item: { id: this.form.value.residuoId },
-        quantity: 100,
-        unit: 'litros'
+        quantity: 0,
+        unit: 'No especifica'
       }
     ]
   };
@@ -129,8 +114,8 @@ register() {
 
 openDetalle(t: Transporte) {
   this.selectedTransport = { ...t };
-  console.log('🧪 Transporte seleccionado:', this.selectedTransport);
-  console.log('🧪 Items:', this.selectedTransport.items);
+  console.log('Transporte seleccionado:', this.selectedTransport);
+  console.log('Items:', this.selectedTransport.items);
   this.editMode = false;
   this.showDetalleModal = true;
 }
