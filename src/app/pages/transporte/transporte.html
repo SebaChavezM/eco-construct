@@ -146,26 +146,22 @@
               </div>
             </div>
             
-            <div class="col-md-6">
-              <label class="form-label">Residuo a Transportar</label>
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Tipo de residuo"
-                formControlName="residuo"
-                [class.is-invalid]="
-                  form.get('residuo')!.touched && form.get('residuo')!.invalid
-                "
-              />
-              <div
-                *ngIf="
-                  form.get('residuo')!.touched && form.get('residuo')!.hasError('required')
-                "
-                class="invalid-feedback"
-              >
-                Debes ingresar un residuo
-              </div>
+          <div class="col-md-6">
+            <label class="form-label">Residuo a Transportar</label>
+            <select
+              class="form-select"
+              formControlName="residuoId"
+              [class.is-invalid]="form.get('residuoId')!.touched && form.get('residuoId')!.invalid"
+            >
+              <option value="" disabled selected>Seleccione un residuo</option>
+              <option *ngFor="let r of residuos" [value]="r.id">
+                {{ r.name }}
+              </option>
+            </select>
+            <div *ngIf="form.get('residuoId')!.touched && form.get('residuoId')!.hasError('required')" class="invalid-feedback">
+              Debes seleccionar un residuo
             </div>
+          </div>
 
             <div class="col-md-6">
               <label class="form-label">Lugar de Retiro</label>
@@ -337,7 +333,7 @@
           </div>
           <div class="col-auto info-item text-center">
             <i class="bi bi-clock-history me-1 fs-5 text-success"></i><br>
-            <small class="label text-uppercase text-secondary">ETA</small><br>
+            <small class="label text-uppercase text-secondary">Llegada</small><br>
             <span class="info-text">{{ t.fechaLlegada | date:'HH:mm' }}</span>
           </div>
         </div>
@@ -361,33 +357,37 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
       <div class="modal-content">
 
+        <!-- Cabecera -->
         <div class="modal-header border-0">
           <h5 class="modal-title">
             <i class="bi bi-truck-front-fill me-2 text-success fs-4"></i>
-            Detalle del Transporte #{{ numeroServicio - 1 }}
+            Servicio N°{{ selectedTransport?.id }}
           </h5>
           <button type="button" class="btn-close" (click)="closeDetalle()"></button>
         </div>
 
+        <!-- Estado Actual -->
         <div class="estado-container px-4 mb-2 d-flex justify-content-between align-items-center">
           <h6 class="fw-semibold mb-0">Estado Actual</h6>
-          <span class="badge status-badge">En tránsito</span>
+          <span class="badge status-badge">{{ selectedTransport?.estadoTexto }}</span>
         </div>
         <hr class="mx-4 my-2">
 
-        <div class="modal-body px-4 pb-4">
+        <!-- CUERPO: MODO VISTA -->
+        <div *ngIf="!editMode" class="modal-body px-4 pb-4">
 
           <h6 class="fw-semibold mb-2">Información del Residuo</h6>
-          <p class="mb-0">
-            <strong>{{ selectedTransport?.residuo }} – {{ selectedTransport?.cantidad }} m³</strong>
-          </p>
-          <p class="text-secondary small mb-0">Tipo: {{ selectedTransport?.residuo }}</p>
+          <strong>
+            {{
+              getResiduoNombrePorId(selectedTransport?.items?.[0]?.item?.id || 0)
+            }} – {{ selectedTransport?.items?.[0]?.quantity || 0 }} m³
+          </strong>
           <hr>
 
           <h6 class="fw-semibold mb-2">Ruta de Transporte</h6>
           <p class="mb-1">
             <i class="bi bi-geo-alt-fill text-success me-1 fs-5"></i>
-            <strong>Origen:</strong> Bodegas de EcoConstruct
+            <strong>Origen:</strong> {{ selectedTransport?.origen }}
           </p>
           <p class="mb-0">
             <i class="bi bi-geo-alt text-danger me-1 fs-5"></i>
@@ -400,6 +400,12 @@
             <div class="col-md-6">
               <p class="mb-0">
                 <i class="bi bi-person-fill text-success me-1 fs-5"></i>
+                <strong>Transportista:</strong> {{ selectedTransport?.transportista }}
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-person-fill text-success me-1 fs-5"></i>
                 <strong>Conductor:</strong> {{ selectedTransport?.conductor }}
               </p>
             </div>
@@ -407,6 +413,12 @@
               <p class="mb-0">
                 <i class="bi bi-card-text text-success me-1 fs-5"></i>
                 <strong>Patente:</strong> {{ selectedTransport?.patente }}
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-hash text-success me-1 fs-5"></i>
+                <strong>Guía:</strong> {{ selectedTransport?.guia }}
               </p>
             </div>
           </div>
@@ -432,14 +444,87 @@
 
         </div>
 
+        <!-- CUERPO: MODO EDICIÓN -->
+        <form *ngIf="editMode" [formGroup]="form" class="modal-body px-4 pb-4">
+
+          <div class="row g-3">
+            <!-- Transportista -->
+            <div class="col-md-6">
+              <label class="form-label">Transportista</label>
+              <input type="text" class="form-control" formControlName="transportista">
+            </div>
+            <!-- Residuo -->
+            <div class="col-md-6">
+              <label class="form-label">Residuo</label>
+              <input type="text" class="form-control" formControlName="residuo">
+            </div>
+            <!-- Obra / Destino -->
+            <div class="col-md-6">
+              <label class="form-label">Destino</label>
+              <input type="text" class="form-control" formControlName="obra">
+            </div>
+            <!-- Conductor -->
+            <div class="col-md-6">
+              <label class="form-label">Conductor</label>
+              <input type="text" class="form-control" formControlName="conductor">
+            </div>
+            <!-- Patente -->
+            <div class="col-md-6">
+              <label class="form-label">Patente</label>
+              <input type="text" class="form-control" formControlName="patente">
+            </div>
+            <!-- Guía -->
+            <div class="col-md-6">
+              <label class="form-label">Guía</label>
+              <input type="text" class="form-control" formControlName="guia">
+            </div>
+            <!-- Fecha Salida -->
+            <div class="col-md-6">
+              <label class="form-label">Fecha Salida</label>
+              <input type="datetime-local" class="form-control" formControlName="fechaSalida">
+            </div>
+            <!-- Fecha Llegada -->
+            <div class="col-md-6">
+              <label class="form-label">Fecha Llegada</label>
+              <input type="datetime-local" class="form-control" formControlName="fechaLlegada">
+            </div>
+          </div>
+
+        </form>
+
+        <!-- Pie de modal -->
         <div class="modal-footer border-0 px-4 pb-3">
-          <button type="button" class="btn btn-success" (click)="closeDetalle()">Cerrar</button>
-          <button type="button" class="btn btn-warning">Editar</button>
+          <!-- Botón Editar (solo vista) -->
+          <button
+            *ngIf="!editMode"
+            type="button"
+            class="btn btn-warning"
+            (click)="onEdit()"
+          >
+            Editar
+          </button>
+
+          <!-- Botón Guardar (solo edición) -->
+          <button
+            *ngIf="editMode"
+            type="button"
+            class="btn btn-primary"
+            [disabled]="form.invalid"
+            (click)="onSave()"
+          >
+            Guardar
+          </button>
+
+          <!-- Siempre: Cerrar -->
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeDetalle()"
+          >
+            Cerrar
+          </button>
         </div>
+
       </div>
+    </div>
   </div>
-
-  <!-- fondo oscuro -->
-  <div class="modal-backdrop fade" [class.show]="showDetalleModal" *ngIf="showDetalleModal">
-
-</div>

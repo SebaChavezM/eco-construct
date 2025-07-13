@@ -5,7 +5,7 @@ import { environment } from '../environments/environment';
 export const msalInstance = new PublicClientApplication({
   auth: {
     clientId: '89954608-cf12-4719-8792-5468ad42cbfd',
-    authority: 'https://pinoliso.b2clogin.com/pinoliso.onmicrosoft.com/B2C_1_login',
+    authority: 'https://pinoliso.b2clogin.com/pinoliso.onmicrosoft.com/B2C_1_login_only',
     redirectUri: `${environment.baseUrl}/dashboard/`,
     knownAuthorities: ['pinoliso.b2clogin.com'],
   },
