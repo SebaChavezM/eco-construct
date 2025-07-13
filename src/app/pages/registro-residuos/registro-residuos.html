@@ -48,6 +48,15 @@
     </a>
 
     <a
+      routerLink="/inventario"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-box-seam me-2"></i>
+      Inventario
+    </a>
+
+    <a
       routerLink="/historial-trazabilidad"
       routerLinkActive="active"
       class="nav-link text-white"
@@ -285,8 +294,6 @@
               </div>
               <div class="text-end">
                 <span class="badge bg-light text-dark border">Registrado</span>
-                <br />
-                <a href="#" class="small text-decoration-underline">Ver</a>
               </div>
             </div>
             <hr *ngIf="registro !== recientes[recientes.length - 1]" />

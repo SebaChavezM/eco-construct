@@ -10,16 +10,17 @@ import { TransporteComponent } from './pages/transporte/transporte';
 import { ReportesComponent } from './pages/reportes/reportes';
 import { PerfilComponent }         from './pages/perfil/perfil';
 import { UsuariosComponent }       from './pages/usuarios/usuarios';
+import { InventarioComponent } from './pages/inventario/inventario';
 
 import { MsalGuard } from '@azure/msal-angular';
 
 export const routes: Routes = [
-  { path: '',                         redirectTo: 'login',                 pathMatch: 'full' },
-  { path: 'login',                    component: LoginComponent },
-  { path: 'dashboard',                component: DashboardComponent, canActivate: [MsalGuard] },
+  { path: '', redirectTo: 'login',                 pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [MsalGuard] },
 
-  { path: 'gestion-obras',            component: GestionObrasComponent, canActivate: [MsalGuard] },
-  { path: 'gestion-obras/nueva',      component: NuevaObraComponent, canActivate: [MsalGuard] },
+  { path: 'gestion-obras', component: GestionObrasComponent, canActivate: [MsalGuard] },
+  { path: 'gestion-obras/nueva', component: NuevaObraComponent, canActivate: [MsalGuard] },
   { path: 'gestion-obras/editar/:id', component: EditarObraComponent, canActivate: [MsalGuard] },
   { path: 'gestion-obras/detalles/:id', component: DetallesObraComponent, canActivate: [MsalGuard] },
 
@@ -27,10 +28,12 @@ export const routes: Routes = [
 
   { path: 'transporte', component: TransporteComponent, canActivate: [MsalGuard] },
 
+  { path: 'inventario', component: InventarioComponent, canActivate: [MsalGuard] },
+
   { path: 'reportes', component: ReportesComponent, canActivate: [MsalGuard] },
 
-  { path: 'perfil',                   component: PerfilComponent, canActivate: [MsalGuard] },
-  { path: 'usuarios',                 component: UsuariosComponent, canActivate: [MsalGuard] },
+  { path: 'perfil', component: PerfilComponent, canActivate: [MsalGuard] },
+  { path: 'usuarios', component: UsuariosComponent, canActivate: [MsalGuard] },
 
-  { path: '**',                       redirectTo: 'dashboard' }
+  { path: '**', redirectTo: 'dashboard' }
 ];

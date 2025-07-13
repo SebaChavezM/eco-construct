@@ -1,5 +1,5 @@
 <div class="d-flex vh-100 overflow-hidden">
-
+  <!-- Sidebar -->
 <aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
   <div class="d-flex align-items-center mb-4">
     <i class="bi bi-leaf-fill fs-4 me-2"></i>
@@ -101,67 +101,73 @@
   </nav>
 </aside>
 
-  <main class="flex-grow-1 overflow-auto p-4">
+  <!-- Contenido principal -->
+  <main class="contenido flex-grow-1 overflow-auto">
+    <h2>Inventario de Residuos</h2>
+    <p class="subtitulo">Listado de residuos recolectados</p>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div>
-        <h2 class="h3 mb-1">Reportes y Análisis</h2>
-        <small class="text-muted">Genera y visualiza reportes detallados sobre la gestión de residuos</small>
-      </div>
-      <button class="btn btn-success">
-        <i class="bi bi-file-earmark-text me-1"></i> Nuevo Reporte
-      </button>
+    <!-- Inventario -->
+    <div class="caja">
+      <h3>Inventario</h3>
+      <table class="tabla-inventario">
+        <thead>
+          <tr>
+            <th>Obra</th>
+            <th>Cantidad</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of inventarioAgrupado">
+            <td>{{ item.nombre }}</td>
+            <td>{{ item.cantidad }}</td>
+            <td>{{ item.unidad }}</td>
+            <td>Usado</td>
+            <td>$</td>
+            </tr>
+        </tbody>
+      </table>
     </div>
 
-    <div class="row gx-3 gy-3 mb-4">
-      <div class="col-12 col-md-3" *ngFor="let s of stats">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body position-relative">
-            <small class="text-muted">{{ s.label }}</small>
-            <h2 class="fw-bold mt-1">{{ s.value }}</h2>
-            <div *ngIf="s.sub" class="small text-success">{{ s.sub }}</div>
-            <i class="bi {{ s.icon }} position-absolute" style="top:1rem; right:1rem; color:#6b7280;"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row gx-4 gy-4 mb-4">
-      <div class="col-12 col-lg-6">
-        <div class="card shadow-sm p-3">
-          <h5 class="card-title mb-3">Evolución Mensual de Residuos</h5>
-          <canvas #lineCanvas></canvas>
-        </div>
-      </div>
-      <div class="col-12 col-lg-6">
-        <div class="card shadow-sm p-3">
-          <h5 class="card-title mb-3">Distribución por Tipo de Residuo</h5>
-          <canvas #pieCanvas></canvas>
-        </div>
-      </div>
-    </div>
-
-    <div class="card shadow-sm p-3">
-      <h5 class="mb-3">Reportes Generados</h5>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let r of reports">
-          <div>
-            <div class="fw-bold">{{ r.title }}</div>
-            <small class="text-muted">{{ r.date }} · Tipo: {{ r.type }}</small>
-          </div>
-          <div class="d-flex align-items-center">
-            <span class="badge"
-                  [class.bg-success]="r.status==='Completado'"
-                  [class.bg-secondary]="r.status==='En proceso'"
-                  [class.bg-danger]="r.status==='Fallido'">
-              {{ r.status }}
-            </span>
-            <button class="btn btn-outline-secondary btn-sm ms-3">
-              <i class="bi bi-download"></i> Descargar
-            </button>
-          </div>
-        </li>
-      </ul>
+    <!-- Materiales Reciclados -->
+    <div class="caja">
+      <h3>Materiales Reciclados</h3>
+      <table class="tabla-inventario">
+        <thead>
+          <tr>
+            <th>Material</th>
+            <th>Cantidad</th>
+            <th>Estado</th>
+            <th>Calidad</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Concreto Reciclado</strong></td>
+            <td>12.3 m³</td>
+            <td><span class="estado estado-disponible">Disponible</span></td>
+            <td>Grado A</td>
+            <td class="valor">$1.800</td>
+          </tr>
+          <tr>
+            <td><strong>Acero Recuperado</strong></td>
+            <td>2.5 Ton</td>
+            <td><span class="estado estado-vendido">Vendido</span></td>
+            <td>Grado B</td>
+            <td class="valor">$3.200</td>
+          </tr>
+          <tr>
+            <td><strong>Madera Tratada</strong></td>
+            <td>5.7 m³</td>
+            <td><span class="estado estado-disponible">Disponible</span></td>
+            <td>Grado A</td>
+            <td class="valor">$950</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </main>
 </div>

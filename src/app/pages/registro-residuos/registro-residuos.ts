@@ -71,8 +71,10 @@ export class RegistroResiduosComponent implements OnInit {
       error: () => this.snack.open('Error cargando obras', 'Cerrar', { duration: 3000 })
     });
     this.svc.getTransportes().subscribe({
-      next: t => this.transportes = t,
-      error: () => this.snack.open('Error cargando servicios de transporte', 'Cerrar', { duration: 3000 })
+      next: t => this.transportes = t.filter(tr => tr.status?.id === 1),
+      error: () => {
+        this.snack.open('Error cargando servicios de transporte', 'Cerrar', { duration: 3000 });
+      }
     });
     this.svc.getRegistros().subscribe({
       next: (registros: RegistroResiduos[]) => {
@@ -100,17 +102,27 @@ export class RegistroResiduosComponent implements OnInit {
 
   submit(): void {
     if (!this.registro.carrierId) {
-      this.snack.open('Selecciona un responsable', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+      this.snack.open('Selecciona un responsable', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['snack-error']
+      });
       return;
     }
+
     if (!this.registro.workSiteId) {
-      this.snack.open('Selecciona la obra', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+      this.snack.open('Selecciona la obra', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['snack-error']
+      });
       return;
     }
 
     const firstItem = this.registro.items[0];
     if (!firstItem || !firstItem.item.id || !firstItem.quantity) {
-      this.snack.open('Selecciona el tipo de residuo y la cantidad', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+      this.snack.open('Selecciona el tipo de residuo y la cantidad', 'Cerrar', {
+        duration: 3000,
+        panelClass: ['snack-error']
+      });
       return;
     }
 
@@ -123,12 +135,41 @@ export class RegistroResiduosComponent implements OnInit {
       this.unidadSeleccionada
     ).subscribe({
       next: () => {
-        this.snack.open('Residuo registrado', 'Cerrar', { duration: 3000, panelClass: ['snack-success'] });
-        this.recientes.unshift({ ...this.registro });
-        this.resetFormulario();
+        if (this.registro.transporteId) {
+          this.svc.actualizarEstadoTransporte(this.registro.transporteId, 3).subscribe({
+            next: () => {
+              this.snack.open('Residuo registrado y transporte actualizado', 'Cerrar', {
+                duration: 3000,
+                panelClass: ['snack-success']
+              });
+
+              this.transportes = this.transportes.filter(t => t.id !== this.registro.transporteId);
+
+              this.recientes.unshift({ ...this.registro });
+              this.resetFormulario();
+            },
+            error: () => {
+              this.snack.open('Residuo registrado, pero no se pudo actualizar el transporte', 'Cerrar', {
+                duration: 3000,
+                panelClass: ['snack-error']
+              });
+              this.resetFormulario();
+            }
+          });
+        } else {
+          this.snack.open('Residuo registrado', 'Cerrar', {
+            duration: 3000,
+            panelClass: ['snack-success']
+          });
+          this.recientes.unshift({ ...this.registro });
+          this.resetFormulario();
+        }
       },
       error: () => {
-        this.snack.open('Error al registrar residuo', 'Cerrar', { duration: 3000, panelClass: ['snack-error'] });
+        this.snack.open('Error al registrar residuo', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['snack-error']
+        });
       }
     });
   }

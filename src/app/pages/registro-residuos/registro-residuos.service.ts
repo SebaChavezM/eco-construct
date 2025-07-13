@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient }   from '@angular/common/http';
 import { Observable }   from 'rxjs';
 import { Transporte } from './registro-residuos.model';
+import { switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
 import {
@@ -66,6 +67,16 @@ export class RegistroResiduosService {
 
   getRegistros(): Observable<RegistroResiduos[]> {
     return this.http.get<RegistroResiduos[]>(this.inventoriesUrl);
+  }
+
+  actualizarEstadoTransporte(transporteId: number, nuevoEstadoId: number): Observable<any> {
+    const url = `${environment.apiUrl}/carriers/${transporteId}`;
+    return this.http.get<any>(url).pipe(
+      switchMap((carrier: any) => {
+        carrier.status = { id: nuevoEstadoId };
+        return this.http.put(url, carrier);
+      })
+    );
   }
 
 }

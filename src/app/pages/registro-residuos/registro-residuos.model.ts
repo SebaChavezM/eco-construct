@@ -34,6 +34,7 @@ export interface Transporte {
   driver: string;
   destiny: string;
   estadoTexto: string;
+  status: { id: number; name: string };
   fechaLlegada: string;
   fechaSalida: string;
   trackingNumber: string;
