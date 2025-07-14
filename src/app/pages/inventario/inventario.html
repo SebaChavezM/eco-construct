@@ -1,6 +1,6 @@
 <div class="d-flex vh-100 overflow-hidden">
-  <!-- Sidebar -->
-<aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
+
+  <aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
   <div class="d-flex align-items-center mb-4">
     <i class="bi bi-leaf-fill fs-4 me-2"></i>
     <span class="h5 mb-0">EcoConstruct</span>
@@ -85,19 +85,19 @@
       <i class="bi bi-person-circle me-2"></i>
       Perfil
     </a>
-    <a
-      routerLink="/configuracion"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-gear me-2"></i>
-      Configuración
-    </a>
           <a routerLink="/usuarios"
          routerLinkActive="active"
          class="nav-link text-white mt-2">
         <i class="bi bi-people me-2"></i>Usuarios
-      </a>
+    </a>
+    <a
+      href="#"
+      (click)="logout()"
+      class="nav-link text-white mt-2"
+    >
+      <i class="bi bi-box-arrow-right me-2"></i>
+      Cerrar Sesión
+    </a>
   </nav>
 </aside>
 

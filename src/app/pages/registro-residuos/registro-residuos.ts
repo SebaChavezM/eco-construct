@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import {
@@ -51,10 +51,10 @@ export class RegistroResiduosComponent implements OnInit {
   };
 
   recientes: RegistroResiduos[] = [];
-
   constructor(
     private svc: RegistroResiduosService,
-    private snack: MatSnackBar
+    private snack: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -280,6 +280,12 @@ export class RegistroResiduosComponent implements OnInit {
   obtenerNombreResponsable(id: number | undefined): string {
     const responsable = this.responsables.find(c => c.id === id);
     return responsable?.carrier || 'Responsable desconocido';
+  }
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 
 }

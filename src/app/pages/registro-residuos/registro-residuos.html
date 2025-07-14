@@ -85,19 +85,19 @@
       <i class="bi bi-person-circle me-2"></i>
       Perfil
     </a>
-    <a
-      routerLink="/configuracion"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-gear me-2"></i>
-      Configuración
-    </a>
           <a routerLink="/usuarios"
          routerLinkActive="active"
          class="nav-link text-white mt-2">
         <i class="bi bi-people me-2"></i>Usuarios
-      </a>
+    </a>
+    <a
+      href="#"
+      (click)="logout()"
+      class="nav-link text-white mt-2"
+    >
+      <i class="bi bi-box-arrow-right me-2"></i>
+      Cerrar Sesión
+    </a>
   </nav>
 </aside>
 
@@ -268,16 +268,15 @@
                 <div>
                   <div class="fw-bold">
                     {{
-                      obtenerNombreTipo(registro.items[0]?.item?.id) || 'Tipo desconocido'
+                      obtenerNombreTipo(registro.items[0].item.id) || 'Tipo desconocido'
                     }} -
                     {{
-                      registro.items[0]?.quantity ?? '?'
+                      registro.items[0].quantity
                     }}
                     {{
-                      obtenerUnidadPorTipo(registro.items[0]?.item?.id)
+                      obtenerUnidadPorTipo(registro.items[0].item.id)
                     }}
                   </div>
-
                   <div class="text-muted small">
                     {{
                       obtenerNombreObra(registro.workSiteId)
@@ -285,8 +284,6 @@
                       obtenerNombreResponsable(registro.carrierId)
                     }}
                   </div>
-
-                  <!-- Comentarios -->
                   <div class="text-muted small" *ngIf="registro.comments">
                     {{ registro.comments }}
                   </div>

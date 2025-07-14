@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 
 import { TransporteService } from './transporte.service';
@@ -35,7 +35,8 @@ export class TransporteComponent implements OnInit {
   constructor(
     private fb:    FormBuilder,
     private svc:   TransporteService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private router: Router
   ) {
   this.form = this.fb.group({
     transportista: ['', Validators.required],
@@ -160,5 +161,11 @@ openDetalle(t: Transporte) {
     this.showDetalleModal = false;
     this.editMode = false;
     this.form.reset();
+  }
+
+   logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 }

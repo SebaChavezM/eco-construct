@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 interface Obra {
   id: number;
@@ -23,6 +23,9 @@ interface Obra {
   styleUrls: ['./gestion-obras.css']
 })
 export class GestionObrasComponent {
+
+  constructor(private router: Router) {}
+
   obras: Obra[] = [
     {
       id: 1,
@@ -61,4 +64,10 @@ export class GestionObrasComponent {
       estado: 'Finalizando'
     }
   ];
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
+  }
 }

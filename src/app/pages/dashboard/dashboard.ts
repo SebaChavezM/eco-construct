@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ChartOptions, ChartData } from 'chart.js';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; 
+import { Router, RouterModule } from '@angular/router'; 
 import { NgChartsModule } from 'ng2-charts';
 import { HttpClient } from '@angular/common/http';
 
@@ -13,6 +13,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./dashboard.css']
 })
 export class DashboardComponent {
+
+  constructor(private router: Router) {}
 
   public pieChartLabels = ['Reciclado', 'Disposición final', 'Reutilizado', 'Otro'];
   public pieChartData: ChartData<'pie', number[], string> = {
@@ -61,8 +63,10 @@ export class DashboardComponent {
     }
   };
 
-  constructor(private http: HttpClient) {
-    
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 
 }

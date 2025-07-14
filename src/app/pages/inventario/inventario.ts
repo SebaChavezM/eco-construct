@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { InventoryService } from './inventory.service';
 
 @Component({
@@ -14,8 +14,8 @@ export class InventarioComponent implements OnInit {
   inventarioOriginal: any[] = [];
   inventarioAgrupado: { nombre: string, cantidad: number, unidad: string }[] = [];
 
-  constructor(private inventoryService: InventoryService) {}
-
+  constructor(private inventoryService: InventoryService, private router: Router) {}
+  
   ngOnInit(): void {
     this.inventoryService.getAll().subscribe((data) => {
       this.inventarioOriginal = data;
@@ -67,5 +67,11 @@ export class InventarioComponent implements OnInit {
 
   getValorEstimado(valor: number): string {
     return `$${valor.toLocaleString('en-US')}`;
+  }
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 }

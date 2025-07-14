@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../usuarios/user.service';
 import { User } from '../usuarios/user.model';
-import { ToastrService } from 'ngx-toastr'; // ✅ IMPORTAR TOASTR
+import { ToastrService } from 'ngx-toastr';
 declare var bootstrap: any;
 
 @Component({
@@ -30,6 +30,7 @@ export class UsuariosComponent implements OnInit {
   constructor(
     private userService: UserService,
     private toastr: ToastrService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -92,10 +93,10 @@ export class UsuariosComponent implements OnInit {
           const modal = bootstrap.Modal.getInstance(document.getElementById('editUserModal')!);
           modal?.hide();
 
-          this.toastr.success('Usuario actualizado correctamente', 'Éxito'); // ✅ TOAST ÉXITO
+          this.toastr.success('Usuario actualizado correctamente', 'Éxito');
         },
         error: () => {
-          this.toastr.error('Error al actualizar el usuario', 'Error'); // ✅ TOAST ERROR
+          this.toastr.error('Error al actualizar el usuario', 'Error');
         }
       });
     }
@@ -134,6 +135,12 @@ export class UsuariosComponent implements OnInit {
         this.toastr.error('Hubo un error al crear el usuario', 'Error');
       }
     });
+  }
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 
 }

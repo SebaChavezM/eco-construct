@@ -1,8 +1,10 @@
-import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { CommonModule }   from '@angular/common';
-import { RouterModule }   from '@angular/router';
-import { FormsModule }    from '@angular/forms';
-import Chart              from 'chart.js/auto';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { ReportesService } from './reportes.service';
+import type { ChartConfiguration, ChartTypeRegistry } from 'chart.js';
+import Chart from 'chart.js/auto';
 
 interface StatCard {
   label: string;
@@ -12,10 +14,10 @@ interface StatCard {
 }
 
 interface MonthlyData {
-  month: string;
-  generated: number;
-  recycled: number;
-  treated: number;
+  mes: string;
+  generado: number;
+  reciclado: number;
+  tratado: number;
 }
 
 interface ReportEntry {
@@ -32,77 +34,151 @@ interface ReportEntry {
   templateUrl: './reportes.html',
   styleUrls: ['./reportes.css']
 })
-export class ReportesComponent implements AfterViewInit {
+export class ReportesComponent implements OnInit, AfterViewInit {
 
-  stats: StatCard[] = [
-    { label: 'Total Generado',   value: '1,847 m³',  sub: '+12.3% vs mes anterior', icon: 'bi-box-seam' },
-    { label: 'Reciclado',        value: '1,264 m³',  sub: '68.4% del total',         icon: 'bi-arrow-repeat' },
-    { label: 'Eficiencia Global',value: '87.2%',     sub: '+4.1% mejora',          icon: 'bi-graph-up' },
-    { label: 'Obras Monitoreadas', value: '3',      sub: 'Activas este mes',        icon: 'bi-building' }
-  ];
-
-  monthly: MonthlyData[] = [
-    { month: 'Ene', generated: 48, recycled: 30, treated: 10 },
-    { month: 'Feb', generated: 52, recycled: 35, treated: 12 },
-    { month: 'Mar', generated: 50, recycled: 32, treated: 11 },
-    { month: 'Abr', generated: 65, recycled: 45, treated: 15 },
-    { month: 'May', generated: 58, recycled: 40, treated: 13 },
-    { month: 'Jun', generated: 75, recycled: 50, treated: 16 },
-  ];
-
-  distribution = [
-    { label: 'Escombros', value: 52 },
-    { label: 'Madera',    value: 28 },
-    { label: 'Metal',     value: 15 },
-    { label: 'Cartón',    value: 5 },
-  ];
-
-  reports: ReportEntry[] = [
-    { title: 'Reporte Mensual de Residuos', date: '2024-06-30', type: 'Mensual',   status: 'Completado' },
-    { title: 'Análisis de Eficiencia por Obra', date: '2024-06-28', type: 'Análisis', status: 'Completado' },
-    { title: 'Proyección Trimestral', date: '2024-06-25', type: 'Trimestral', status: 'En proceso' },
-  ];
+  stats: StatCard[] = [];
+  monthly: MonthlyData[] = [];
+  reports: ReportEntry[] = [];
+  distribution: { label: string; value: number }[] = [];
 
   @ViewChild('lineCanvas') lineCanvas!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('pieCanvas')  pieCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('pieCanvas') pieCanvas!: ElementRef<HTMLCanvasElement>;
+
+  private lineChart?: Chart;
+  private pieChart?: Chart;
+
+  constructor(
+    private router: Router,
+    private reportesService: ReportesService
+  ) {}
+
+  ngOnInit(): void {
+    this.reportesService.getResumenStats().subscribe(stats => {
+      this.stats = [
+        {
+          label: 'Total Generado',
+          value: `${stats.totalGenerado} m³`,
+          sub: '',
+          icon: 'bi-box-seam'
+        },
+        {
+          label: 'Reciclado',
+          value: `${stats.reciclado} m³`,
+          sub: stats.totalGenerado > 0
+            ? `${((stats.reciclado / stats.totalGenerado) * 100).toFixed(1)}% del total`
+            : '0% del total',
+          icon: 'bi-arrow-repeat'
+        },
+        {
+          label: 'Eficiencia Global',
+          value: `${stats.eficienciaGlobal}%`,
+          sub: '',
+          icon: 'bi-graph-up'
+        },
+        {
+          label: 'Obras Monitoreadas',
+          value: `${stats.obrasActivas}`,
+          sub: 'Activas este mes',
+          icon: 'bi-building'
+        }
+      ];
+    });
+
+    this.reportesService.getDistribucionTipos().subscribe(data => {
+      this.distribution = data.map(d => ({ label: d.tipo, value: d.cantidad }));
+      this.renderPieChart();
+    });
+
+    this.reportesService.getDatosMensuales().subscribe(data => {
+      this.monthly = data;
+      this.renderLineChart();
+    });
+  }
 
   ngAfterViewInit(): void {
+    this.renderLineChart();
+    this.renderPieChart();
+  }
 
-    new Chart(this.lineCanvas.nativeElement.getContext('2d')!, {
+  renderLineChart() {
+    if (!this.lineCanvas?.nativeElement) return;
+
+    const ctx = this.lineCanvas.nativeElement.getContext('2d');
+    if (!ctx) return;
+
+    if (this.lineChart) {
+      this.lineChart.destroy();
+    }
+
+    this.lineChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: this.monthly.map(m => m.month),
+        labels: this.monthly.map(m => m.mes),
         datasets: [
           {
             label: 'Generado',
-            data: this.monthly.map(m => m.generated),
+            data: this.monthly.map(m => m.generado),
             fill: false,
+            borderColor: '#4CAF50'
           },
           {
             label: 'Reciclado',
-            data: this.monthly.map(m => m.recycled),
+            data: this.monthly.map(m => m.reciclado),
             fill: false,
+            borderColor: '#2196F3'
           },
           {
             label: 'Tratado',
-            data: this.monthly.map(m => m.treated),
+            data: this.monthly.map(m => m.tratado),
             fill: false,
+            borderColor: '#FFC107'
           }
         ]
       },
       options: {
         responsive: true,
-        plugins: { legend: { position: 'bottom' } }
+        plugins: {
+          legend: { position: 'bottom' }
+        }
       }
     });
+  }
 
-    new Chart(this.pieCanvas.nativeElement.getContext('2d')!, {
-      type: 'pie',
-      data: {
-        labels: this.distribution.map(d => d.label),
-        datasets: [{ data: this.distribution.map(d => d.value) }]
-      },
-      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-    });
+renderPieChart(): void {
+  if (!this.pieCanvas?.nativeElement) return;
+
+  const ctx = this.pieCanvas.nativeElement.getContext('2d');
+  if (!ctx) return;
+
+  if (this.pieChart) {
+    this.pieChart.destroy();
+  }
+
+  const config: ChartConfiguration<'pie', number[], string> = {
+    type: 'pie',
+    data: {
+      labels: this.distribution.map(d => d.label),
+      datasets: [
+        {
+          data: this.distribution.map(d => d.value),
+          backgroundColor: ['#4CAF50', '#2196F3', '#FFC107', '#FF5722']
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' }
+      }
+    }
+  };
+
+  this.pieChart = new Chart<'pie', number[], string>(ctx, config);
+}
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 }

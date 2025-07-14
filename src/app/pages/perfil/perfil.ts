@@ -1,19 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
-interface Usuario {
-  avatarUrl: string;
-  role: string;
-  fullName: string;
-  email: string;
-  phone: string;
-  position: string;
-  company: string;
-  location: string;
-  bio: string;
-}
+import { AuthService } from '../../guards/auth.service';
+import { UserProfile } from './user-profile.model';
 
 interface Estadistica {
   label: string;
@@ -33,24 +23,38 @@ interface Actividad {
   templateUrl: './perfil.html',
   styleUrls: ['./perfil.css']
 })
-export class PerfilComponent {
-  user: Usuario = {
-    avatarUrl: 'https://via.placeholder.com/120',
-    role: 'Administrador',
-    fullName: 'Juan Carlos Administrador',
-    email: 'admin@ecoconstruct.com',
-    phone: '+56 9 1234 5678',
-    position: 'Supervisor de Gestión Ambiental',
-    company: 'EcoConstruct Chile',
-    location: 'Santiago, Chile',
-    bio: 'Especialista en gestión ambiental con más de 5 años de experiencia en el sector construcción. Enfocado en la implementación de prácticas sostenibles y reducción del impacto ambiental.'
+export class PerfilComponent implements OnInit {
+  user: UserProfile = {
+    id: -1,
+    username: '',
+    fullName: '',
+    email: '',
+    role: '',
+    phone: '',
+    position: '',
+    company: '',
+    location: '',
+    biography: '',
+    avatarUrl: 'https://via.placeholder.com/120'
   };
+
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    const profile = this.authService.getUserProfile();
+    if (profile) {
+      this.user = profile;
+    }
+  }
 
   stats: Estadistica[] = [
     { label: 'Obras gestionadas', value: 12 },
-    { label: 'Registros creados',   value: 347 },
-    { label: 'Reportes generados',   value: 28 },
-    { label: 'Días activo',         value: 156 }
+    { label: 'Registros creados', value: 347 },
+    { label: 'Reportes generados', value: 28 },
+    { label: 'Días activo', value: 156 }
   ];
 
   activities: Actividad[] = [
@@ -70,4 +74,10 @@ export class PerfilComponent {
       date: '2024-06-13 16:45'
     }
   ];
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
+  }
 }
