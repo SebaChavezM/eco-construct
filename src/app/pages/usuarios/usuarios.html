@@ -108,7 +108,9 @@
         <h2 class="h3 mb-1">Gestión de Usuarios</h2>
         <small class="text-muted">Administra usuarios, roles y permisos del sistema</small>
       </div>
-      <button class="btn btn-success">
+      <button class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#createUserModal">
         <i class="bi bi-person-plus me-1"></i>Nuevo Usuario
       </button>
     </div>
@@ -200,7 +202,10 @@
               <td>{{ u.projects }}</td>
               <td>{{ u.lastAccess }}</td>
               <td>
-                <button class="btn btn-outline-secondary btn-sm me-1">
+                <button class="btn btn-outline-secondary btn-sm me-1"
+                        (click)="abrirModal(u)"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editUserModal">
                   <i class="bi bi-pencil"></i>
                 </button>
                 <button class="btn btn-outline-danger btn-sm">
@@ -213,5 +218,138 @@
       </div>
     </div>
 
-  </main>
+</main>
+
+  <!-- Modal de Edición de Usuario -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editUserModalLabel">Editar Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form *ngIf="usuarioSeleccionado">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="username" class="form-label">Nombre de Usuario</label>
+              <input id="username" class="form-control" [(ngModel)]="usuarioSeleccionado.username" name="username">
+            </div>
+            <div class="col-md-6">
+              <label for="email" class="form-label">Correo</label>
+              <input id="email" type="email" class="form-control" [(ngModel)]="usuarioSeleccionado.email" name="email">
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="position" class="form-label">Cargo</label>
+              <input id="position" class="form-control" [(ngModel)]="usuarioSeleccionado.position" name="position">
+            </div>
+            <div class="col-md-6">
+              <label for="company" class="form-label">Empresa</label>
+              <input id="company" class="form-control" [(ngModel)]="usuarioSeleccionado.company" name="company">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="address" class="form-label">Dirección</label>
+            <input id="address" class="form-control" [(ngModel)]="usuarioSeleccionado.address" name="address">
+          </div>
+          <div class="mb-3">
+            <label for="biography" class="form-label">Biografía</label>
+            <textarea id="biography" class="form-control" rows="3" [(ngModel)]="usuarioSeleccionado.biography" name="biography"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="role" class="form-label">Rol</label>
+            <select id="role" class="form-select" [(ngModel)]="usuarioSeleccionado.role" name="role">
+              <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="guardarCambios()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear Usuario -->
+<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createUserModalLabel">Crear Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form #form="ngForm" (ngSubmit)="crearUsuario()" novalidate>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="newUsername" class="form-label">Nombre de Usuario</label>
+              <input id="newUsername" name="username" class="form-control" [(ngModel)]="nuevoUsuario.username" required>
+            </div>
+            <div class="col-md-6">
+              <label for="newEmail" class="form-label">Correo</label>
+              <input id="newEmail" name="email" type="email" class="form-control" [(ngModel)]="nuevoUsuario.email" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">Contraseña</label>
+            <input id="newPassword" name="password" type="password" class="form-control" [(ngModel)]="nuevoUsuario.password" required>
+            <small class="text-muted">
+              Mínimo 8 caracteres, con mayúsculas, minúsculas y números.
+            </small>
+            <div *ngIf="nuevoUsuario.password && !esPasswordValido(nuevoUsuario.password)" class="text-danger mt-1">
+              La contraseña no cumple con los requisitos de seguridad.
+            </div>
+            <div class="mb-3">
+              <label for="newName" class="form-label">Nombre completo</label>
+              <input id="newName" name="name" class="form-control" [(ngModel)]="nuevoUsuario.name" required>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="newPosition" class="form-label">Cargo</label>
+              <input id="newPosition" name="position" class="form-control" [(ngModel)]="nuevoUsuario.position">
+            </div>
+            <div class="col-md-6">
+              <label for="newCompany" class="form-label">Empresa</label>
+              <input id="newCompany" name="company" class="form-control" [(ngModel)]="nuevoUsuario.company">
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="newAddress" class="form-label">Dirección</label>
+            <input id="newAddress" name="address" class="form-control" [(ngModel)]="nuevoUsuario.address">
+          </div>
+
+          <div class="mb-3">
+            <label for="newBiography" class="form-label">Biografía</label>
+            <textarea id="newBiography" name="biography" class="form-control" rows="3" [(ngModel)]="nuevoUsuario.biography"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="newRole" class="form-label">Rol</label>
+            <select id="newRole" name="role" class="form-select" [(ngModel)]="nuevoUsuario.role" required>
+              <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      <button type="button"
+              class="btn btn-primary"
+              [disabled]="!esPasswordValido(nuevoUsuario.password ?? '')"
+              (click)="crearUsuario()">
+        Crear Usuario
+      </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
