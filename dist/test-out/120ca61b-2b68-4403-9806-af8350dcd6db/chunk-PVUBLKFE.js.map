@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/environments/environment.ts"],
-  "sourcesContent": ["// src/environments/environment.prod.ts\r\nexport const environment = {\r\n  production: true,\r\n  apiUrl: 'https://ecoconstruct.azure-api.net/api',\r\n  baseUrl: 'https://ecoconstruct.azure-api.net',\r\n  featureFlag: false,\r\n};\r\n"],
-  "mappings": ";;;;;AAAA,IACa;AADb;;;AACO,IAAM,cAAc;MACzB,YAAY;MACZ,QAAQ;MACR,SAAS;MACT,aAAa;;;;",
-  "names": []
-}
