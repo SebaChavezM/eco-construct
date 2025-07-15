@@ -1,35 +1,36 @@
 import { Injectable } from '@angular/core';
-import { MsalService } from '@azure/msal-angular';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 import { UserProfile } from '../pages/perfil/user-profile.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private msalService: MsalService) {}
+  private readonly apiUrl = 'http://74.249.29.180:8080/api/users/me';
 
-  getActiveAccount() {
-    return this.msalService.instance.getActiveAccount();
+  constructor(private http: HttpClient) {}
+
+  getUserProfile(): Observable<UserProfile> {
+    const token = localStorage.getItem('access_token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.get<any>(this.apiUrl, { headers }).pipe(
+      map((data) => {
+        return {
+          id: data.id,
+          username: data.username,
+          fullName: data.name,
+          email: data.email,
+          role: data.role,
+          phone: '', // si no viene desde backend
+          position: data.position,
+          company: data.company,
+          location: data.address,
+          biography: data.biography,
+          avatarUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' // tu imagen por defecto
+        } as UserProfile;
+      })
+    );
   }
-
-getUserProfile(): UserProfile | null {
-  const account = this.getActiveAccount();
-  if (account && account.idTokenClaims) {
-    const claims = account.idTokenClaims as any;
-
-    return {
-      id: -1,
-      fullName: claims['name'] ?? '',
-      email: claims['emails']?.[0] ?? claims['email'] ?? '',
-      role: claims['role'] ?? 'Operador',
-      phone: claims['phone_number'] ?? '',
-      position: claims['position'] ?? '',
-      company: claims['company'] ?? '',
-      location: claims['location'] ?? 'Chile',
-      biography: claims['bio'] ?? '',
-      avatarUrl: claims['picture'] ?? 'https://via.placeholder.com/120',
-      username: claims['preferred_username'] ?? claims['unique_name'] ?? ''
-    };
-  }
-  return null;
-}
-
 }

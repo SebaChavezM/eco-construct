@@ -41,6 +41,8 @@ export class TransporteComponent implements OnInit {
   this.form = this.fb.group({
     transportista: ['', Validators.required],
     residuoId: ['', Validators.required],
+    cantidad: [0, Validators.required],
+    unidad: ['No especifica', Validators.required],
     obra: ['', Validators.required],
     conductor: ['', [Validators.required, Validators.minLength(3)]],
     patente: ['', [Validators.required, Validators.pattern(/^[A-Z0-9\-]{4,10}$/)]],
@@ -136,11 +138,25 @@ openDetalle(t: Transporte) {
 
   onSave() {
     if (this.form.invalid || !this.selectedTransport) return;
+
+    if (new Date(this.form.value.fechaLlegada) < new Date(this.form.value.fechaSalida)) {
+      this.toastr.error('La fecha de llegada no puede ser anterior a la de salida', 'Validación');
+      return;
+    }
+
     const updated: Transporte = {
       ...this.selectedTransport,
       ...this.form.value,
-      destino: this.form.value.obra
+      destino: this.form.value.obra,
+      items: [
+        {
+          item: { id: Number(this.form.value.residuoId) },
+          quantity: Number(this.form.value.cantidad),
+          unit: this.form.value.unidad
+        }
+      ]
     };
+
     this.svc.updateTransporte(updated).subscribe({
       next: t => {
         const i = this.enCurso.findIndex(x => x.id === t.id);
@@ -148,7 +164,10 @@ openDetalle(t: Transporte) {
         this.toastr.success('Transporte actualizado','¡Listo!');
         this.closeDetalle();
       },
-      error: () => this.toastr.error('Error actualizando','Error')
+      error: err => {
+        console.error('Error al actualizar transporte:', err);
+        this.toastr.error('Error actualizando transporte', 'Error');
+      }
     });
   }
 

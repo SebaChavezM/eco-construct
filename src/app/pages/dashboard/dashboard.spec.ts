@@ -1,57 +1,50 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { NgChartsModule } from 'ng2-charts';
+import { CommonModule } from '@angular/common';
+import { Location } from '@angular/common';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
-  let mockRouter: jasmine.SpyObj<Router>;
-  let mockActivatedRoute: any;
+  let router: Router;
 
   beforeEach(async () => {
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-
-    mockActivatedRoute = {
-      snapshot: {
-        params: {},
-        queryParams: {}
-      }
-    };
-
     await TestBed.configureTestingModule({
-      imports: [DashboardComponent, NgChartsModule],
-      providers: [
-        { provide: Router, useValue: mockRouter },
-        { provide: ActivatedRoute, useValue: mockActivatedRoute } // 👈 SE AGREGA ESTO
-      ]
+      imports: [DashboardComponent, CommonModule, NgChartsModule, RouterTestingModule.withRoutes([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
-  it('debería crearse correctamente', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('debería tener etiquetas de gráfico circular definidas', () => {
-    expect(component.pieChartLabels).toEqual(['Reciclado', 'Disposición final', 'Reutilizado', 'Otro']);
+  it('should define pie chart data correctly', () => {
+    expect(component.pieChartData).toBeDefined();
+    expect(component.pieChartData.datasets[0].data.length).toBe(4);
   });
 
-  it('debería tener tipo de gráfico de barras como "bar"', () => {
-    expect(component.barChartType).toBe('bar');
+  it('should define bar chart data correctly', () => {
+    expect(component.barChartData).toBeDefined();
+    expect(component.barChartData.datasets.length).toBe(3);
   });
 
-  it('debería limpiar sesión y redirigir al login al hacer logout', () => {
-    spyOn(localStorage, 'clear');
-    spyOn(sessionStorage, 'clear');
+  it('should clear storage and navigate on logout', () => {
+    const navigateSpy = spyOn(router, 'navigate');
+    localStorage.setItem('test', 'value');
+    sessionStorage.setItem('test', 'value');
 
     component.logout();
 
-    expect(localStorage.clear).toHaveBeenCalled();
-    expect(sessionStorage.clear).toHaveBeenCalled();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+    expect(localStorage.getItem('test')).toBeNull();
+    expect(sessionStorage.getItem('test')).toBeNull();
+    expect(navigateSpy).toHaveBeenCalledWith(['/login']);
   });
 });

@@ -2,40 +2,56 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TransporteComponent } from './transporte';
 import { ReactiveFormsModule } from '@angular/forms';
 import { of, throwError } from 'rxjs';
+import { Component, Directive } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Router, ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { RouterModule } from '@angular/router';
 import { TransporteService } from './transporte.service';
 import { Transporte } from './transporte.model';
 import { Residuo } from './residuo.model';
 import { CommonModule } from '@angular/common';
+
+@Component({ template: '' })
+class DummyComponent {}
+
+@Directive({
+  selector: '[routerLinkActive]',
+  standalone: true
+})
+class MockRouterLinkActive {}
 
 describe('TransporteComponent', () => {
   let component: TransporteComponent;
   let fixture: ComponentFixture<TransporteComponent>;
   let mockSvc: jasmine.SpyObj<TransporteService>;
   let mockToastr: jasmine.SpyObj<ToastrService>;
-  let mockRouter: jasmine.SpyObj<Router>;
+  let router: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
     mockSvc = jasmine.createSpyObj('TransporteService', ['getTransportes', 'getResiduos', 'createTransporte', 'updateTransporte']);
     mockToastr = jasmine.createSpyObj('ToastrService', ['error', 'success']);
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    const mockRouter = jasmine.createSpyObj('Router', ['navigate']);
 
-    await TestBed.configureTestingModule({
-      imports: [
-        TransporteComponent,
-        ReactiveFormsModule,
-        CommonModule,
-        RouterTestingModule.withRoutes([])
-      ],
-      providers: [
-        { provide: TransporteService, useValue: mockSvc },
-        { provide: ToastrService, useValue: mockToastr },
-        { provide: Router, useValue: mockRouter },
-        { provide: ActivatedRoute, useValue: {} }
-      ]
-    }).compileComponents();
+    mockSvc.getTransportes.and.returnValue(of([]));
+    mockSvc.getResiduos.and.returnValue(of([]));
+
+  await TestBed.configureTestingModule({
+    imports: [
+      TransporteComponent,
+      ReactiveFormsModule,
+      CommonModule,
+      RouterModule.forRoot([]),
+      MockRouterLinkActive
+    ],
+    providers: [
+      { provide: TransporteService, useValue: mockSvc },
+      { provide: ToastrService, useValue: mockToastr },
+      { provide: Router, useValue: mockRouter },
+      { provide: ActivatedRoute, useValue: {} }
+    ]
+  }).compileComponents();
+
+    router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
 
     fixture = TestBed.createComponent(TransporteComponent);
     component = fixture.componentInstance;
@@ -136,12 +152,13 @@ describe('TransporteComponent', () => {
   it('logout debería limpiar storage y navegar al login', () => {
     spyOn(localStorage, 'clear');
     spyOn(sessionStorage, 'clear');
+    spyOn(router, 'navigate');
 
     component.logout();
 
     expect(localStorage.clear).toHaveBeenCalled();
     expect(sessionStorage.clear).toHaveBeenCalled();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+    expect(router.navigate).toHaveBeenCalledWith(['/login']);
   });
 
   it('debería devolver nombre de residuo por ID', () => {

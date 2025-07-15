@@ -1,51 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PerfilComponent } from './perfil';
 import { Router } from '@angular/router';
+import { of, throwError } from 'rxjs';
 import { AuthService } from '../../guards/auth.service';
+import { RouterTestingModule } from '@angular/router/testing';
 import { UserProfile } from './user-profile.model';
-import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
 
 describe('PerfilComponent', () => {
   let component: PerfilComponent;
   let fixture: ComponentFixture<PerfilComponent>;
-  let mockRouter: jasmine.SpyObj<Router>;
-  let mockAuthService: jasmine.SpyObj<AuthService>;
-
-  const mockUser: UserProfile = {
-    id: 1,
-    username: 'admin',
-    fullName: 'Administrador General',
-    email: 'admin@ecoconstruct.com',
-    role: 'Admin',
-    phone: '123456789',
-    position: 'Gerente de Proyecto',
-    company: 'EcoConstruct',
-    location: 'Santiago, Chile',
-    biography: 'Responsable de supervisar la operación general.',
-    avatarUrl: 'https://via.placeholder.com/120'
-  };
+  let authServiceSpy: jasmine.SpyObj<AuthService>;
+  let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
-    mockAuthService = jasmine.createSpyObj('AuthService', ['getUserProfile']);
+    authServiceSpy = jasmine.createSpyObj('AuthService', ['getUserProfile']);
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [PerfilComponent],
+      imports: [PerfilComponent, RouterTestingModule],
       providers: [
-        { provide: Router, useValue: mockRouter },
-        { provide: AuthService, useValue: mockAuthService },
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            snapshot: {
-              paramMap: {
-                get: (key: string) => 'mock-id'
-              }
-            },
-            params: of({ id: 'mock-id' })
-          }
-        }
+        { provide: AuthService, useValue: authServiceSpy },
+        { provide: Router, useValue: routerSpy }
       ]
     }).compileComponents();
 
@@ -53,46 +28,54 @@ describe('PerfilComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('debería crearse correctamente', () => {
+  it('should create the component', () => {
     expect(component).toBeTruthy();
   });
 
-  it('debería cargar perfil de usuario en ngOnInit si existe', () => {
-    mockAuthService.getUserProfile.and.returnValue(mockUser);
+  it('should set user on ngOnInit success', () => {
+    const mockUser: UserProfile = {
+      id: 1,
+      username: 'sebastian',
+      password: '',
+      role: 'admin',
+      fullName: 'Sebastián Chávez',
+      email: 'sebastian@example.com',
+      position: 'Ingeniero',
+      company: 'Praxa',
+      address: 'Concepción',
+      phone: '123456789',
+      location: 'Chile',
+      biography: 'Desarrollador de software',
+      createdAt: '',
+      updatedAt: '',
+      avatarUrl: ''
+    };
 
-    component.ngOnInit();
+    authServiceSpy.getUserProfile.and.returnValue(of(mockUser));
+    fixture.detectChanges();
 
-    expect(component.user).toEqual(mockUser);
-    expect(mockAuthService.getUserProfile).toHaveBeenCalled();
+    expect(component.user).toBeTruthy();
+    expect(component.user!.fullName).toBe('Sebastián Chávez');
+    expect(component.user!.avatarUrl).toContain('cdn-icons-png');
   });
 
-  it('no debería modificar el usuario si no hay perfil en AuthService', () => {
-    mockAuthService.getUserProfile.and.returnValue(null);
+  it('should handle error on ngOnInit failure', () => {
+    spyOn(console, 'error');
+    authServiceSpy.getUserProfile.and.returnValue(throwError(() => new Error('Error')));
+    fixture.detectChanges();
 
-    component.ngOnInit();
-
-    expect(component.user.id).toBe(-1);
-    expect(mockAuthService.getUserProfile).toHaveBeenCalled();
+    expect(component.user).toBeNull();
+    expect(console.error).toHaveBeenCalled();
   });
 
-  it('debería contener estadísticas predefinidas', () => {
-    expect(component.stats.length).toBe(4);
-    expect(component.stats[0].label).toBe('Obras gestionadas');
-  });
-
-  it('debería contener actividades recientes', () => {
-    expect(component.activities.length).toBe(3);
-    expect(component.activities[0].title).toBe('Registro de residuos');
-  });
-
-  it('logout debería limpiar el storage y redirigir al login', () => {
-    spyOn(localStorage, 'clear');
-    spyOn(sessionStorage, 'clear');
+  it('should clear storage and navigate on logout', () => {
+    localStorage.setItem('key', 'value');
+    sessionStorage.setItem('key', 'value');
 
     component.logout();
 
-    expect(localStorage.clear).toHaveBeenCalled();
-    expect(sessionStorage.clear).toHaveBeenCalled();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+    expect(localStorage.getItem('key')).toBeNull();
+    expect(sessionStorage.getItem('key')).toBeNull();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
   });
 });

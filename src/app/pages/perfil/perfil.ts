@@ -24,31 +24,7 @@ interface Actividad {
   styleUrls: ['./perfil.css']
 })
 export class PerfilComponent implements OnInit {
-  user: UserProfile = {
-    id: -1,
-    username: '',
-    fullName: '',
-    email: '',
-    role: '',
-    phone: '',
-    position: '',
-    company: '',
-    location: '',
-    biography: '',
-    avatarUrl: 'https://via.placeholder.com/120'
-  };
-
-  constructor(
-    private router: Router,
-    private authService: AuthService
-  ) {}
-
-  ngOnInit(): void {
-    const profile = this.authService.getUserProfile();
-    if (profile) {
-      this.user = profile;
-    }
-  }
+  user: UserProfile | null = null;
 
   stats: Estadistica[] = [
     { label: 'Obras gestionadas', value: 12 },
@@ -75,7 +51,26 @@ export class PerfilComponent implements OnInit {
     }
   ];
 
-  logout() {
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    this.authService.getUserProfile().subscribe({
+      next: (profile) => {
+        this.user = {
+          ...profile,
+          avatarUrl: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+        };
+      },
+      error: (err) => {
+        console.error('Error al cargar perfil:', err);
+      }
+    });
+  }
+
+  logout(): void {
     localStorage.clear();
     sessionStorage.clear();
     this.router.navigate(['/login']);

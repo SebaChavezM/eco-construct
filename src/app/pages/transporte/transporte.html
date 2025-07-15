@@ -453,46 +453,39 @@
 
         </div>
 
-        <!-- CUERPO: MODO EDICIÓN -->
         <form *ngIf="editMode" [formGroup]="form" class="modal-body px-4 pb-4">
 
           <div class="row g-3">
-            <!-- Transportista -->
             <div class="col-md-6">
               <label class="form-label">Transportista</label>
               <input type="text" class="form-control" formControlName="transportista">
             </div>
-            <!-- Residuo -->
             <div class="col-md-6">
               <label class="form-label">Residuo</label>
-              <input type="text" class="form-control" formControlName="residuo">
+              <select class="form-select" formControlName="residuoId">
+                <option *ngFor="let r of residuos" [value]="r.id">{{ r.name }}</option>
+              </select>
             </div>
-            <!-- Obra / Destino -->
             <div class="col-md-6">
               <label class="form-label">Destino</label>
               <input type="text" class="form-control" formControlName="obra">
             </div>
-            <!-- Conductor -->
             <div class="col-md-6">
               <label class="form-label">Conductor</label>
               <input type="text" class="form-control" formControlName="conductor">
             </div>
-            <!-- Patente -->
             <div class="col-md-6">
               <label class="form-label">Patente</label>
               <input type="text" class="form-control" formControlName="patente">
             </div>
-            <!-- Guía -->
             <div class="col-md-6">
               <label class="form-label">Guía</label>
               <input type="text" class="form-control" formControlName="guia">
             </div>
-            <!-- Fecha Salida -->
             <div class="col-md-6">
               <label class="form-label">Fecha Salida</label>
               <input type="datetime-local" class="form-control" formControlName="fechaSalida">
             </div>
-            <!-- Fecha Llegada -->
             <div class="col-md-6">
               <label class="form-label">Fecha Llegada</label>
               <input type="datetime-local" class="form-control" formControlName="fechaLlegada">
@@ -501,9 +494,7 @@
 
         </form>
 
-        <!-- Pie de modal -->
         <div class="modal-footer border-0 px-4 pb-3">
-          <!-- Botón Editar (solo vista) -->
           <button
             *ngIf="!editMode"
             type="button"
@@ -512,8 +503,6 @@
           >
             Editar
           </button>
-
-          <!-- Botón Guardar (solo edición) -->
           <button
             *ngIf="editMode"
             type="button"
@@ -524,7 +513,6 @@
             Guardar
           </button>
 
-          <!-- Siempre: Cerrar -->
           <button
             type="button"
             class="btn btn-secondary"

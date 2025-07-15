@@ -79,14 +79,24 @@ export class TransporteService {
     const payload = {
       user: { id: 1 },
       status: { id: 1 },
-      carrier:  t.transportista,
+      carrier: t.transportista,
       destiny: t.destino,
       driver: t.conductor,
       patent: t.patente,
       departureTime: t.fechaSalida,
       arrivalTime: t.fechaLlegada,
-      trackingNumber: t.guia
+      trackingNumber: t.guia,
+      items: Array.isArray(t.items)
+        ? t.items.map(item => ({
+            item: { id: Number(item.item.id) },
+            quantity: item.quantity,
+            unit: item.unit
+          }))
+        : []
     };
+
+    console.log('Payload PUT:', JSON.stringify(payload, null, 2));
+
     return this.http.put<CarrierDto>(url, payload)
       .pipe(map(this.toTransporte));
   }

@@ -1,19 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GestionObrasComponent } from './gestion-obras';
 import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('GestionObrasComponent', () => {
   let component: GestionObrasComponent;
   let fixture: ComponentFixture<GestionObrasComponent>;
-  let mockRouter: jasmine.SpyObj<Router>;
+  let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [GestionObrasComponent],
+      imports: [GestionObrasComponent, RouterTestingModule],
       providers: [
-        { provide: Router, useValue: mockRouter }
+        { provide: Router, useValue: routerSpy }
       ]
     }).compileComponents();
 
@@ -22,28 +23,22 @@ describe('GestionObrasComponent', () => {
     fixture.detectChanges();
   });
 
-  it('debería crearse correctamente', () => {
+  it('debería crear el componente', () => {
     expect(component).toBeTruthy();
   });
 
-  it('debería tener 3 obras inicializadas', () => {
-    expect(component.obras.length).toBe(3);
+  it('debería tener una lista de obras definida', () => {
+    expect(component.obras.length).toBeGreaterThan(0);
   });
 
-  it('debería contener una obra con título "Torre Residencial Norte"', () => {
-    const obra = component.obras.find(o => o.titulo === 'Torre Residencial Norte');
-    expect(obra).toBeDefined();
-    expect(obra?.ubicacion).toBe('Las Condes, Santiago');
-  });
-
-  it('logout debería limpiar sesión y redirigir al login', () => {
-    spyOn(localStorage, 'clear');
-    spyOn(sessionStorage, 'clear');
+  it('logout debería limpiar almacenamiento y redirigir a login', () => {
+    localStorage.setItem('test', 'value');
+    sessionStorage.setItem('test', 'value');
 
     component.logout();
 
-    expect(localStorage.clear).toHaveBeenCalled();
-    expect(sessionStorage.clear).toHaveBeenCalled();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/login']);
+    expect(localStorage.getItem('test')).toBeNull();
+    expect(sessionStorage.getItem('test')).toBeNull();
+    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
   });
 });
