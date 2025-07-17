@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { UserProfile } from '../pages/perfil/user-profile.model';
+import { MsalService } from '@azure/msal-angular';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly apiUrl = 'http://74.249.29.180:8080/api/users/me';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private msalService: MsalService ) {}
 
   getUserProfile(): Observable<UserProfile> {
     const token = localStorage.getItem('access_token');
@@ -23,7 +24,7 @@ export class AuthService {
           fullName: data.name,
           email: data.email,
           role: data.role,
-          phone: '', // si no viene desde backend
+          phone: '',
           position: data.position,
           company: data.company,
           location: data.address,
@@ -33,4 +34,13 @@ export class AuthService {
       })
     );
   }
+
+  logout(): void {
+    const activeAccount = this.msalService.instance.getActiveAccount();
+    this.msalService.logoutRedirect({
+      account: activeAccount!,
+      postLogoutRedirectUri: '/login'
+    });
+  }
+
 }

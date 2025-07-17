@@ -182,7 +182,15 @@ openDetalle(t: Transporte) {
     this.form.reset();
   }
 
-   logout() {
+  getEstadoBadgeClass(estado: string): string {
+    return estado === 'Entregado' ? 'bg-secondary' : 'bg-success';
+  }
+
+  getEstadoTexto(estado: string): string {
+    return estado === 'Entregado' ? 'Recepcionado' : estado;
+  }
+
+  logout() {
     localStorage.clear();
     sessionStorage.clear();
     this.router.navigate(['/login']);

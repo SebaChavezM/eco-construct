@@ -1,0 +1,199 @@
+<div class="d-flex vh-100 overflow-hidden">
+
+<aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
+  <div class="d-flex align-items-center mb-4">
+    <i class="bi bi-leaf-fill fs-4 me-2"></i>
+    <span class="h5 mb-0">EcoConstruct</span>
+  </div>
+
+  <nav class="nav flex-column">
+
+    <small class="text-uppercase text-white-50 mb-2">Principal</small>
+
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-speedometer2 me-2"></i>
+      Dashboard
+    </a>
+
+    <a
+      routerLink="/gestion-obras"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-building me-2"></i>
+      Gestión de Obras
+    </a>
+
+    <a
+      routerLink="/transporte"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-truck me-2"></i>
+      Transporte
+    </a>
+
+    <a
+      routerLink="/registro-residuos"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-card-checklist me-2"></i>
+      Registro de Residuos
+    </a>
+
+    <a
+      routerLink="/inventario"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-box-seam me-2"></i>
+      Inventario
+    </a>
+
+    <a
+      routerLink="/procesar-residuos"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-recycle me-2"></i>
+      Procesar Residuos
+    </a>
+
+    <a
+      routerLink="/historial-trazabilidad"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-clock-history me-2"></i>
+      Historial y Trazabilidad
+    </a>
+
+    <a
+      routerLink="/reportes"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-bar-chart me-2"></i>
+      Reportes
+    </a>
+
+    <hr class="border-light">
+
+    <small class="text-uppercase text-white-50 mb-2">Sistema</small>
+    <a
+      routerLink="/perfil"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-person-circle me-2"></i>
+      Perfil
+    </a>
+          <a routerLink="/usuarios"
+         routerLinkActive="active"
+         class="nav-link text-white mt-2">
+        <i class="bi bi-people me-2"></i>Usuarios
+    </a>
+    <a
+      href="#"
+      (click)="logout()"
+      class="nav-link text-white mt-2"
+    >
+      <i class="bi bi-box-arrow-right me-2"></i>
+      Cerrar Sesión
+    </a>
+  </nav>
+</aside>
+
+<div class="main-grid">
+
+  <div class="left-column">
+
+    <div class="card">
+    <h5><i class="bi bi-box"></i> Residuos Disponibles</h5>
+
+    <div class="residuos-scrollable">
+        <ng-container *ngFor="let res of inventarios">
+        <ng-container *ngIf="res.items && res.items.length > 0 && res.items[0] && res.workSite">
+            <div class="residuo-option">
+            <input
+                type="radio"
+                name="residuo"
+                [value]="res.id ?? null"
+                [(ngModel)]="selectedInventoryId"
+                (change)="estadoSeleccion.residuo = true"
+            />
+            <label>
+                <strong>{{ res.items[0].item?.name || 'Sin nombre' }}</strong><br />
+                <small>{{ res.workSite?.name || 'Sin obra' }}</small><br />
+                <small>{{ res.items[0].quantity || 0 }} {{ res.items[0].unit || '' }}</small>
+            </label>
+            </div>
+        </ng-container>
+        </ng-container>
+    </div>
+    </div>
+
+    <div class="card">
+      <h5><i class="bi bi-gear-fill"></i> Configuración del Proceso</h5>
+      <label>Tipo de Material a Producir</label>
+      <select class="form-select" [(ngModel)]="materialProduccion" (change)="estadoSeleccion.material = true">
+        <option value="">Seleccionar material</option>
+        <option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</option>
+      </select>
+
+      <label class="mt-3">Calidad Objetivo</label>
+      <select class="form-select" [(ngModel)]="calidad" (change)="estadoSeleccion.calidad = true">
+        <option value="">Seleccionar calidad</option>
+        <option *ngFor="let grado of calidades" [value]="grado">{{ grado }}</option>
+      </select>
+
+      <button class="btn btn-success w-100 mt-4"
+              [disabled]="!selectedInventoryId || !materialProduccion || !calidad"
+              (click)="iniciarProcesamiento()">
+        ♻ Iniciar Procesamiento
+      </button>
+    </div>
+  </div>
+
+  <div class="right-column">
+
+    <div class="card preview">
+      <h5><i class="bi bi-arrow-right-circle"></i> Vista Previa de Producción</h5>
+      <div *ngIf="materialProduccion && calidad" class="preview-content">
+        <p><strong class="text-success">{{ materialProduccion }}</strong></p>
+        <h4><strong>{{ unidadesProducidas }}</strong> unidades</h4>
+        <small>{{ calidad }}</small>
+        <p class="mt-3"><strong>Valor Estimado:</strong> <span class="text-success">${{ valorEstimado }}</span></p>
+        <p><strong>Residuos Seleccionados:</strong> 1 elemento</p>
+      </div>
+    </div>
+
+    <div class="card estado-del-proceso">
+    <h5><i class="bi bi-check-circle"></i> Estado del Proceso</h5>
+    <ul class="list-unstyled">
+        <li>
+        <i class="bi bi-circle-fill" [ngClass]="estadoSeleccion.residuo ? 'text-success' : 'text-secondary'"></i>
+        Residuos seleccionados
+        </li>
+        <li>
+        <i class="bi bi-circle-fill" [ngClass]="estadoSeleccion.material ? 'text-success' : 'text-secondary'"></i>
+        Material configurado
+        </li>
+        <li>
+        <i class="bi bi-circle-fill" [ngClass]="estadoSeleccion.calidad ? 'text-success' : 'text-secondary'"></i>
+        Calidad definida
+        </li>
+        <li>
+        <i class="bi bi-circle-fill" [ngClass]="estadoSeleccion.proceso ? 'text-success' : 'text-secondary'"></i>
+        Proceso activo
+        </li>
+    </ul>
+    </div>
+  </div>
+</div>

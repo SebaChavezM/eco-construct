@@ -242,3 +242,6 @@
   min-width: 100px;
 }
 
+.status-badge.bg-secondary {
+  background-color: #6c757d;
+}

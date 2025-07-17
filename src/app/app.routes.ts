@@ -9,6 +9,7 @@ import { ReportesComponent } from './pages/reportes/reportes';
 import { PerfilComponent }         from './pages/perfil/perfil';
 import { UsuariosComponent }       from './pages/usuarios/usuarios';
 import { InventarioComponent } from './pages/inventario/inventario';
+import { ProcesarResiduosComponent } from './pages/procesar-residuos/procesar-residuos';
 
 import { MsalGuard } from '@azure/msal-angular';
 
@@ -25,6 +26,8 @@ export const routes: Routes = [
   { path: 'transporte', component: TransporteComponent, canActivate: [MsalGuard] },
 
   { path: 'inventario', component: InventarioComponent, canActivate: [MsalGuard] },
+
+  { path: 'procesar-residuos', component: ProcesarResiduosComponent, canActivate: [MsalGuard] },
 
   { path: 'reportes', component: ReportesComponent, canActivate: [MsalGuard] },
 

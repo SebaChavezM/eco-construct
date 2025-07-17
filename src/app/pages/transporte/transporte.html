@@ -30,15 +30,6 @@
     </a>
 
     <a
-      routerLink="/registro-residuos"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-card-checklist me-2"></i>
-      Registro de Residuos
-    </a>
-
-    <a
       routerLink="/transporte"
       routerLinkActive="active"
       class="nav-link text-white"
@@ -48,12 +39,30 @@
     </a>
 
     <a
+      routerLink="/registro-residuos"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-card-checklist me-2"></i>
+      Registro de Residuos
+    </a>
+
+    <a
       routerLink="/inventario"
       routerLinkActive="active"
       class="nav-link text-white"
     >
       <i class="bi bi-box-seam me-2"></i>
       Inventario
+    </a>
+
+    <a
+      routerLink="/procesar-residuos"
+      routerLinkActive="active"
+      class="nav-link text-white"
+    >
+      <i class="bi bi-recycle me-2"></i>
+      Procesar Residuos
     </a>
 
     <a
@@ -375,14 +384,17 @@
           <button type="button" class="btn-close" (click)="closeDetalle()"></button>
         </div>
 
-        <!-- Estado Actual -->
         <div class="estado-container px-4 mb-2 d-flex justify-content-between align-items-center">
           <h6 class="fw-semibold mb-0">Estado Actual</h6>
-          <span class="badge status-badge">{{ selectedTransport?.estadoTexto }}</span>
+          <span
+            class="badge status-badge"
+            [ngClass]="getEstadoBadgeClass(selectedTransport?.estadoTexto || '')"
+          >
+            {{ getEstadoTexto(selectedTransport?.estadoTexto || '') }}
+          </span>
         </div>
         <hr class="mx-4 my-2">
 
-        <!-- CUERPO: MODO VISTA -->
         <div *ngIf="!editMode" class="modal-body px-4 pb-4">
 
           <h6 class="fw-semibold mb-2">Información del Residuo</h6>

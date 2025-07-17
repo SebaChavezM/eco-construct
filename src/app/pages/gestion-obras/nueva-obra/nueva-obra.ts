@@ -2,18 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
-interface Obra {
-  nombre: string;
-  ubicacion: string;
-  constructora: string;
-  encargado: string;
-  fechaInicio: string;
-  fechaFin: string;
-  tipo: string;
-  estado: string;
-  descripcion: string;
-}
+import { WorkSiteService } from '../worksite.service';
+import { CreateWorkSite } from '../obra.model';
 
 @Component({
   selector: 'app-nueva-obra',
@@ -23,28 +15,43 @@ interface Obra {
   styleUrls: ['./nueva-obra.css']
 })
 export class NuevaObraComponent {
-
-  obra: Obra = {
-    nombre: '',
-    ubicacion: '',
-    constructora: '',
-    encargado: '',
-    fechaInicio: '',
-    fechaFin: '',
-    tipo: '',
-    estado: '',
-    descripcion: ''
+  obra = {
+    name: '',
+    address: '',
+    userId: 1,
+    workSiteTypeId: 1,
+    workSiteStatusId: 1
   };
 
-  tipos = ['Residencial', 'Comercial', 'Industrial', 'Infraestructura'];
-  estados = ['Planificada', 'En progreso', 'Suspendida', 'Finalizada'];
+  tipos = [
+    { id: 1, nombre: 'Terreno' },
+    { id: 2, nombre: 'Edificación' },
+    { id: 3, nombre: 'Infraestructura' }
+  ];
 
-  constructor(private router: Router) {}
+  estados = [
+    { id: 1, nombre: 'Activo' },
+    { id: 2, nombre: 'Finalizado' }
+  ];
+
+  constructor(
+    private router: Router,
+    private workSiteService: WorkSiteService
+  ) {}
 
   crearObra() {
-    console.log('Obra a crear:', this.obra);
+    const payload: CreateWorkSite = {
+      name: this.obra.name,
+      address: this.obra.address,
+      user: { id: this.obra.userId },
+      workSiteType: { id: 1 },
+      workSiteStatus: { id: 1 }
+    };
 
-    this.router.navigate(['/gestion-obras']);
+    this.workSiteService.create(payload).subscribe({
+      next: () => this.router.navigate(['/gestion-obras']),
+      error: err => console.error('Error al crear obra:', err)
+    });
   }
 
   cancelar() {

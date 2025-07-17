@@ -44,7 +44,7 @@ export class TransporteService {
       transportista: c.carrier,
       conductor: c.driver,
       guia: c.trackingNumber,
-      estadoTexto: c.status.name,
+      estadoTexto: c.status.name === 'Entregado' ? 'Recepcionado' : c.status.name,
       items: c.items ?? []
     };
   }

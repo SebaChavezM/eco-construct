@@ -1,0 +1,200 @@
+.sidebar {
+  width: 240px;
+  background-color: #16a249;
+  color: white;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+.logo-icon {
+  font-size: 1.5rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+.brand-name {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.nav-section {
+  flex: 1;
+}
+.nav-section-title {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin: 1rem 0 0.5rem;
+}
+.nav-link {
+  color: white;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+.nav-link.active,
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  padding: 30px;
+  flex-grow: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+.left-column,
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.card {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-title i {
+  font-size: 1.2rem;
+}
+
+.residuo-option {
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.residuo-option:hover {
+  border-color: #888;
+}
+
+.residuo-option input[type="radio"] {
+  accent-color: #22c55e;
+  margin-top: 0.2rem;
+}
+
+.residuo-info strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.residuo-info small {
+  display: block;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+select, button {
+  width: 100%;
+  padding: 0.55rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-top: 0.25rem;
+}
+
+button {
+  background-color: #22c55e;
+  color: white;
+  margin-top: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #16a34a;
+}
+
+.preview-title {
+  font-weight: bold;
+  color: #22c55e;
+  margin-bottom: 0.25rem;
+}
+
+.preview-box {
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.preview-box h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: bold;
+  color: #111;
+}
+
+.preview-box small {
+  color: #555;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.text-right {
+  text-align: right;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.residuos-scrollable {
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.residuos-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.residuos-scrollable::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.residuos-scrollable::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.estado-del-proceso i {
+  font-size: 1.7rem;
+  vertical-align: middle;
+}
+
+.estado-del-proceso i.text-success {
+  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transform: scale(1.4);
+}
+.estado-del-proceso i.text-secondary {
+  transform: scale(1);
+}
