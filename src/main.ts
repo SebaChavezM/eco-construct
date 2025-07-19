@@ -46,7 +46,6 @@ msalInstance.initialize().then(() => {
           easeTime: 300
         })
       ),
-      // MSAL y demás:
       {
         provide: MSAL_INSTANCE,
         useValue: msalInstance,

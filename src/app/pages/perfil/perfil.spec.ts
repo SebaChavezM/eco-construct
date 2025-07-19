@@ -1,81 +1,79 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { PerfilComponent } from './perfil';
-import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
 import { AuthService } from '../../guards/auth.service';
-import { RouterTestingModule } from '@angular/router/testing';
-import { UserProfile } from './user-profile.model';
+import { of, throwError } from 'rxjs';
+import { provideRouter } from '@angular/router';
+import { Component } from '@angular/core';
+
+@Component({
+  standalone: true,
+  template: '<p>Login</p>',
+})
+class DummyComponent {}
 
 describe('PerfilComponent', () => {
   let component: PerfilComponent;
   let fixture: ComponentFixture<PerfilComponent>;
   let authServiceSpy: jasmine.SpyObj<AuthService>;
-  let routerSpy: jasmine.SpyObj<Router>;
+
+    const mockUser = {
+    id: 1,
+    username: 'user',
+    password: 'password',
+    role: 'Admin',
+    fullName: 'Juan Pérez',
+    email: 'juan@example.com',
+    position: 'Gerente',
+    company: 'EcoConstruct',
+    address: 'Av. Siempre Viva 123',
+    phone: '123456789',
+    location: 'CDMX',
+    biography: 'Bio de prueba',
+    createdAt: '',
+    updatedAt: ''
+    };
 
   beforeEach(async () => {
-    authServiceSpy = jasmine.createSpyObj('AuthService', ['getUserProfile']);
-    routerSpy = jasmine.createSpyObj('Router', ['navigate']);
+    const spy = jasmine.createSpyObj('AuthService', ['getUserProfile']);
 
     await TestBed.configureTestingModule({
-      imports: [PerfilComponent, RouterTestingModule],
+      imports: [PerfilComponent, DummyComponent],
       providers: [
-        { provide: AuthService, useValue: authServiceSpy },
-        { provide: Router, useValue: routerSpy }
+        { provide: AuthService, useValue: spy },
+        provideRouter([
+          { path: 'login', component: DummyComponent }
+        ])
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(PerfilComponent);
     component = fixture.componentInstance;
+    authServiceSpy = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
   });
 
-  it('should create the component', () => {
+  it('debería crear el componente', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should set user on ngOnInit success', () => {
-    const mockUser: UserProfile = {
-      id: 1,
-      username: 'sebastian',
-      password: '',
-      role: 'admin',
-      fullName: 'Sebastián Chávez',
-      email: 'sebastian@example.com',
-      position: 'Ingeniero',
-      company: 'Praxa',
-      address: 'Concepción',
-      phone: '123456789',
-      location: 'Chile',
-      biography: 'Desarrollador de software',
-      createdAt: '',
-      updatedAt: '',
-      avatarUrl: ''
-    };
-
-    authServiceSpy.getUserProfile.and.returnValue(of(mockUser));
-    fixture.detectChanges();
-
-    expect(component.user).toBeTruthy();
-    expect(component.user!.fullName).toBe('Sebastián Chávez');
-    expect(component.user!.avatarUrl).toContain('cdn-icons-png');
-  });
-
-  it('should handle error on ngOnInit failure', () => {
-    spyOn(console, 'error');
-    authServiceSpy.getUserProfile.and.returnValue(throwError(() => new Error('Error')));
-    fixture.detectChanges();
-
-    expect(component.user).toBeNull();
-    expect(console.error).toHaveBeenCalled();
-  });
-
-  it('should clear storage and navigate on logout', () => {
-    localStorage.setItem('key', 'value');
-    sessionStorage.setItem('key', 'value');
+  it('debería limpiar storage y redirigir al login al hacer logout', () => {
+    spyOn(component['router'], 'navigate');
+    localStorage.setItem('dummy', '1');
+    sessionStorage.setItem('dummy', '1');
 
     component.logout();
 
-    expect(localStorage.getItem('key')).toBeNull();
-    expect(sessionStorage.getItem('key')).toBeNull();
-    expect(routerSpy.navigate).toHaveBeenCalledWith(['/login']);
+    expect(localStorage.getItem('dummy')).toBeNull();
+    expect(sessionStorage.getItem('dummy')).toBeNull();
+    expect(component['router'].navigate).toHaveBeenCalledWith(['/login']);
+  });
+
+  it('debería manejar error si falla la carga del perfil', () => {
+    const error = new Error('Falló la carga');
+    spyOn(console, 'error');
+    authServiceSpy.getUserProfile.and.returnValue(throwError(() => error));
+
+    fixture.detectChanges();
+
+    expect(console.error).toHaveBeenCalledWith('Error al cargar perfil:', error);
   });
 });

@@ -129,8 +129,8 @@
                 (change)="estadoSeleccion.residuo = true"
             />
             <label>
-                <strong>{{ res.items[0].item?.name || 'Sin nombre' }}</strong><br />
-                <small>{{ res.workSite?.name || 'Sin obra' }}</small><br />
+                <small>{{ res.items[0].item.name || 'Sin nombre' }}</small><br />
+                <small>{{ res.items[0].unit || '' }}</small>
                 <small>{{ res.items[0].quantity || 0 }} {{ res.items[0].unit || '' }}</small>
             </label>
             </div>

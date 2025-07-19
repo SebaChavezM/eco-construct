@@ -160,10 +160,7 @@
             </div>
 
             <div class="btn-group">
-              <button class="btn btn-outline-secondary btn-sm" [routerLink]="['/gestion-obras', obra.id, 'ver']">
-                <i class="bi bi-eye me-1"></i> Ver Detalles
-              </button>
-              <button class="btn btn-outline-secondary btn-sm" [routerLink]="['/gestion-obras', obra.id, 'editar']">
+              <button class="btn btn-outline-secondary btn-sm" (click)="abrirModal(obra)">
                 <i class="bi bi-pencil me-1"></i> Editar
               </button>
             </div>
@@ -178,3 +175,77 @@
     </div>
   </div>
 </main>
+
+<div
+  class="modal fade"
+  [class.show]="modalVisible"
+  [style.display]="modalVisible ? 'block' : 'none'"
+  tabindex="-1"
+  role="dialog"
+>
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content border-0 shadow-lg rounded-3">
+
+      <!-- Cabecera -->
+      <div class="modal-header bg-light border-bottom">
+        <h5 class="modal-title text-success d-flex align-items-center">
+          <i class="bi bi-pencil-square me-2"></i> Editar Obra
+        </h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Cerrar"></button>
+      </div>
+
+      <!-- Cuerpo -->
+      <div class="modal-body bg-white px-4 pt-4">
+        <form *ngIf="obraSeleccionada" #editForm="ngForm">
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-secondary">Nombre</label>
+            <input
+              type="text"
+              class="form-control shadow-sm"
+              [(ngModel)]="obraSeleccionada.name"
+              name="nombre"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-secondary">Dirección</label>
+            <input
+              type="text"
+              class="form-control shadow-sm"
+              [(ngModel)]="obraSeleccionada.address"
+              name="direccion"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-secondary">Descripción</label>
+            <textarea
+              class="form-control shadow-sm"
+              [(ngModel)]="obraSeleccionada.user.biography"
+              name="descripcion"
+              rows="3"
+              required
+            ></textarea>
+          </div>
+        </form>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer bg-light border-top px-4 py-3">
+        <button type="button" class="btn btn-outline-secondary" (click)="cerrarModal()">
+          <i class="bi bi-x-lg me-1"></i> Cancelar
+        </button>
+        <button
+          type="submit"
+          class="btn btn-success"
+          (click)="guardarCambios()"
+        >
+          <i class="bi bi-save me-1"></i> Guardar Cambios
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

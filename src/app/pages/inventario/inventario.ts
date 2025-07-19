@@ -49,7 +49,7 @@ export class InventarioComponent implements OnInit {
 
   getFecha(fecha: string): string {
     const date = new Date(fecha);
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    return `${date.getUTCDate()}/${date.getUTCMonth() + 1}/${date.getUTCFullYear()}`;
   }
 
   getEstadoClass(estado: string): string {

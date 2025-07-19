@@ -269,7 +269,7 @@ export class RegistroResiduosComponent implements OnInit {
 
   obtenerUnidadPorTipo(id: number | undefined): string {
     const tipo = this.tipos.find(t => t.id === id);
-    return tipo?.unit || 'u'; // por defecto, si no lo encuentra
+    return tipo?.unit || 'u';
   }
 
   obtenerNombreObra(id: number | undefined): string {

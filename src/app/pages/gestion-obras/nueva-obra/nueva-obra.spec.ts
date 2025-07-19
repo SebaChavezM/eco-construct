@@ -1,57 +1,82 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NuevaObraComponent } from './nueva-obra';
-import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { WorkSiteService } from '../worksite.service';
+import { of, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 describe('NuevaObraComponent', () => {
   let component: NuevaObraComponent;
   let fixture: ComponentFixture<NuevaObraComponent>;
-  let mockRouter: jasmine.SpyObj<Router>;
+  let workSiteServiceSpy: jasmine.SpyObj<WorkSiteService>;
+  let router: Router;
 
   beforeEach(async () => {
-    mockRouter = jasmine.createSpyObj('Router', ['navigate']);
+    const spy = jasmine.createSpyObj('WorkSiteService', ['create']);
 
     await TestBed.configureTestingModule({
-      imports: [NuevaObraComponent, FormsModule, CommonModule, RouterModule],
-      providers: [
-        { provide: Router, useValue: mockRouter }
-      ]
+      imports: [RouterTestingModule, FormsModule, NuevaObraComponent],
+      providers: [{ provide: WorkSiteService, useValue: spy }]
     }).compileComponents();
 
     fixture = TestBed.createComponent(NuevaObraComponent);
     component = fixture.componentInstance;
+    workSiteServiceSpy = TestBed.inject(WorkSiteService) as jasmine.SpyObj<WorkSiteService>;
+    router = TestBed.inject(Router);
     fixture.detectChanges();
   });
 
-  it('debería crearse correctamente', () => {
+  it('debería crear el componente', () => {
     expect(component).toBeTruthy();
   });
 
-  it('debería inicializar la obra con campos vacíos', () => {
-    expect(component.obra.nombre).toBe('');
-    expect(component.obra.descripcion).toBe('');
-    expect(component.obra.fechaInicio).toBe('');
-  });
+  it('debería llamar al servicio y redirigir al crear una obra', () => {
+    const navigateSpy = spyOn(router, 'navigate');
+    workSiteServiceSpy.create.and.returnValue(of({
+    id: 99,
+    name: 'Obra Test',
+    address: 'Calle Test',
+    createdAt: '2025-07-18T00:00:00Z',
+    updatedAt: '2025-07-18T00:00:00Z',
+    user: { id: 1, name: 'Usuario', company: 'Eco', biography: 'Bio' },
+    workSiteType: { id: 1, name: 'Tipo' },
+    workSiteStatus: { id: 1, name: 'Estado' }
+    }));
 
-  it('crearObra debería redirigir a /gestion-obras', () => {
+    component.obra = {
+      name: 'Obra Test',
+      address: 'Calle Test',
+      userId: 1,
+      workSiteTypeId: 1,
+      workSiteStatusId: 1
+    };
+
     component.crearObra();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/gestion-obras']);
+
+    expect(workSiteServiceSpy.create).toHaveBeenCalledWith({
+      name: 'Obra Test',
+      address: 'Calle Test',
+      user: { id: 1 },
+      workSiteType: { id: 1 },
+      workSiteStatus: { id: 1 }
+    });
+
+    expect(navigateSpy).toHaveBeenCalledWith(['/gestion-obras']);
   });
 
-  it('cancelar debería redirigir a /gestion-obras', () => {
+  it('debería mostrar error si falla la creación', () => {
+    const consoleSpy = spyOn(console, 'error');
+    workSiteServiceSpy.create.and.returnValue(throwError(() => 'Error de backend'));
+
+    component.crearObra();
+
+    expect(consoleSpy).toHaveBeenCalledWith('Error al crear obra:', 'Error de backend');
+  });
+
+  it('debería redirigir al cancelar', () => {
+    const navigateSpy = spyOn(router, 'navigate');
     component.cancelar();
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/gestion-obras']);
-  });
-
-  it('debería contener 4 tipos de obra', () => {
-    expect(component.tipos.length).toBe(4);
-    expect(component.tipos).toContain('Residencial');
-  });
-
-  it('debería contener 4 estados de obra', () => {
-    expect(component.estados.length).toBe(4);
-    expect(component.estados).toContain('Finalizada');
+    expect(navigateSpy).toHaveBeenCalledWith(['/gestion-obras']);
   });
 });
