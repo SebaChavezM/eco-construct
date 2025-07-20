@@ -1,271 +1,487 @@
-<div class="d-flex vh-100 overflow-hidden">
+<div class="d-flex vh-100 overflow-hidden dashboard-layout">
 
-<aside class="sidebar text-white flex-shrink-0 p-3" style="width:240px">
-  <div class="d-flex align-items-center mb-4">
-    <i class="bi bi-leaf-fill fs-4 me-2"></i>
-    <span class="h5 mb-0">EcoConstruct</span>
+  <aside class="sidebar text-white flex-shrink-0 p-3" [class.active]="sidebarAbierto">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="d-flex align-items-center">
+        <i class="bi bi-leaf-fill fs-4 me-2"></i>
+        <span class="h5 mb-0">EcoConstruct</span>
+      </div>
+      <button
+        class="sidebar-toggle-btn d-md-none"
+        (click)="toggleSidebar()"
+        aria-label="Toggle Sidebar"
+      >
+        <i class="bi bi-list text-white fs-3"></i>
+      </button>
+    </div>
+
+    <!-- NAV -->
+    <nav class="nav flex-column" *ngIf="sidebarAbierto || anchoPantalla >= 768">
+      <small class="text-uppercase text-white-50 mb-2">Principal</small>
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link text-white">
+        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+      </a>
+      <a routerLink="/gestion-obras" routerLinkActive="active" class="nav-link text-white">
+        <i class="bi bi-building me-2"></i> Gestión de Obras
+      </a>
+      <a routerLink="/transporte" routerLinkActive="active" class="nav-link text-white">
+        <i class="bi bi-truck me-2"></i> Transporte
+      </a>
+      <a routerLink="/registro-residuos" routerLinkActive="active" class="nav-link text-white">
+        <i class="bi bi-card-checklist me-2"></i> Registro de Residuos
+      </a>
+      <a routerLink="/inventario" routerLinkActive="active" class="nav-link text-white">
+        <i class="bi bi-box-seam me-2"></i> Inventario
+      </a>
+      <a routerLink="/procesar-residuos" routerLinkActive="active" class="nav-link text-white">
+        <i class="bi bi-recycle me-2"></i> Procesar Residuos
+      </a>
+      <a routerLink="/historial-trazabilidad" routerLinkActive="active" class="nav-link text-white">
+        <i class="bi bi-clock-history me-2"></i> Historial y Trazabilidad
+      </a>
+      <a routerLink="/reportes" routerLinkActive="active" class="nav-link text-white">
+        <i class="bi bi-bar-chart me-2"></i> Reportes
+      </a>
+
+      <hr class="border-light" />
+
+      <small class="text-uppercase text-white-50 mb-2">Sistema</small>
+      <a routerLink="/perfil" routerLinkActive="active" class="nav-link text-white">
+        <i class="bi bi-person-circle me-2"></i> Perfil
+      </a>
+      <a routerLink="/usuarios" routerLinkActive="active" class="nav-link text-white mt-2">
+        <i class="bi bi-people me-2"></i> Usuarios
+      </a>
+      <a href="#" (click)="logout()" class="nav-link text-white mt-2">
+        <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main-content flex-grow-1 overflow-auto p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="h3 mb-1">Gestión de Transporte</h2>
+        <small class="text-muted">Registra y rastrea el transporte de residuos</small>
+      </div>
+    </div>
+
+    <div class="card mb-5 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">
+          <i class="bi bi-truck me-2"></i>Nuevo Transporte
+        </h5>
+        <small class="text-muted d-block mb-4">
+          Registra el transporte de residuos desde la obra hasta su destino final
+        </small>
+
+        <form [formGroup]="form" (ngSubmit)="register()">
+          <div class="row g-3">
+
+            <div class="col-md-6">
+              <label class="form-label">N° de Servicio</label>
+              <input
+                type="text"
+                class="form-control"
+                [value]="numeroServicio"
+                readonly
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Transportista</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Nombre del transportista"
+                formControlName="transportista"
+                [class.is-invalid]="
+                  form.get('transportista')!.touched &&
+                  form.get('transportista')!.invalid
+                "
+              />
+              <div
+                *ngIf="
+                  form.get('transportista')!.touched &&
+                  form.get('transportista')!.hasError('required')
+                "
+                class="invalid-feedback"
+              >
+                Debes ingresar un transportista
+              </div>
+            </div>
+            
+          <div class="col-md-6">
+            <label class="form-label">Residuo a Transportar</label>
+            <select
+              class="form-select"
+              formControlName="residuoId"
+              [class.is-invalid]="form.get('residuoId')!.touched && form.get('residuoId')!.invalid"
+            >
+              <option value="" disabled selected>Seleccione un residuo</option>
+              <option *ngFor="let r of residuos" [value]="r.id">
+                {{ r.name }}
+              </option>
+            </select>
+            <div *ngIf="form.get('residuoId')!.touched && form.get('residuoId')!.hasError('required')" class="invalid-feedback">
+              Debes seleccionar un residuo
+            </div>
+          </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Lugar de Retiro</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Ubicación de retiro"
+                formControlName="obra"
+                [class.is-invalid]="
+                  form.get('obra')!.touched && form.get('obra')!.invalid
+                "
+              />
+              <div
+                *ngIf="
+                  form.get('obra')!.touched && form.get('obra')!.hasError('required')
+                "
+                class="invalid-feedback"
+              >
+                Debes ingresar el lugar de retiro
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Conductor</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Nombre del conductor"
+                formControlName="conductor"
+                [class.is-invalid]="form.get('conductor')!.touched && form.get('conductor')!.invalid"
+              />
+              <div
+                *ngIf="form.get('conductor')!.touched"
+                class="invalid-feedback"
+              >
+                <span *ngIf="form.get('conductor')!.hasError('required')">
+                  Debes ingresar el nombre del conductor
+                </span>
+                <span *ngIf="form.get('conductor')!.hasError('minlength')">
+                  Mínimo 3 caracteres
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Patente del Vehículo</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="ABC-1234"
+                formControlName="patente"
+                [class.is-invalid]="form.get('patente')!.touched && form.get('patente')!.invalid"
+              />
+              <div
+                *ngIf="form.get('patente')!.touched"
+                class="invalid-feedback"
+              >
+                <span *ngIf="form.get('patente')!.hasError('required')">
+                  Debes ingresar la patente
+                </span>
+                <span *ngIf="form.get('patente')!.hasError('pattern')">
+                  Formato inválido (letras, dígitos y guiones)
+                </span>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Fecha y Hora de Salida</label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                formControlName="fechaSalida"
+                [class.is-invalid]="form.get('fechaSalida')!.touched && form.get('fechaSalida')!.invalid"
+              />
+              <div
+                *ngIf="form.get('fechaSalida')!.touched && form.get('fechaSalida')!.hasError('required')"
+                class="invalid-feedback"
+              >
+                Debes seleccionar la fecha de salida
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Fecha y Hora Estimada de Llegada</label>
+              <input
+                type="datetime-local"
+                class="form-control"
+                formControlName="fechaLlegada"
+                [class.is-invalid]="form.get('fechaLlegada')!.touched && form.get('fechaLlegada')!.invalid"
+              />
+              <div
+                *ngIf="form.get('fechaLlegada')!.touched && form.get('fechaLlegada')!.hasError('required')"
+                class="invalid-feedback"
+              >
+                Debes seleccionar la fecha de llegada
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Número de Guía</label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Ingresa número de guía"
+                formControlName="guia"
+                [class.is-invalid]="form.get('guia')!.touched && form.get('guia')!.invalid"
+              />
+              <div
+                *ngIf="form.get('guia')!.touched && form.get('guia')!.hasError('required')"
+                class="invalid-feedback"
+              >
+                Debes ingresar el número de guía
+              </div>
+            </div>
+
+            <div class="col-12 text-end mt-3">
+              <button
+                type="submit"
+                class="btn btn-success me-2"
+                [disabled]="form.invalid"
+              >
+                <i class="bi bi-plus-lg me-1"></i>Registrar Transporte
+              </button>
+              <button type="button" class="btn btn-outline-secondary" (click)="form.reset()">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="transportes-en-curso p-4">
+    <h5 class="heading mb-1">Transportes en Curso</h5>
+    <p class="subheading text-muted mb-4">Estado actual de los transportes registrados</p>
+
+    <div *ngFor="let t of enCurso" class="card transporte-card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center bg-white">
+        <strong class="transporte-title">{{ t.residuo }} – {{ t.patente }}</strong>
+        <span class="badge status-badge">{{ t.estadoTexto }}</span>
+      </div>
+      <div class="card-body">
+        <div class="row info-row align-items-center mb-3">
+          <div class="col info-item d-flex align-items-center">
+            <i class="bi bi-geo-alt-fill me-2 fs-5 text-success"></i>
+            <div>
+              <small class="label text-uppercase text-secondary">Destino</small><br>
+              <span class="info-text">{{ t.destino }}</span>
+            </div>
+          </div>
+          <div class="col info-item d-flex align-items-center">
+            <i class="bi bi-truck-front-fill me-2 fs-5 text-success"></i>
+            <div>
+              <small class="label text-uppercase text-secondary">Transportista</small><br>
+              <span class="info-text">{{ t.transportista }}</span>
+            </div>
+          </div>
+          <div class="col info-item d-flex align-items-center">
+            <i class="bi bi-person-fill me-2 fs-5 text-success"></i>
+            <div>
+              <small class="label text-uppercase text-secondary">Conductor</small><br>
+              <span class="info-text">{{ t.conductor }}</span>
+            </div>
+          </div>
+          <div class="col-auto info-item text-center">
+            <i class="bi bi-clock me-1 fs-5 text-success"></i><br>
+            <small class="label text-uppercase text-secondary">Salida</small><br>
+            <span class="info-text">{{ t.fechaSalida | date:'HH:mm' }}</span>
+          </div>
+          <div class="col-auto info-item text-center">
+            <i class="bi bi-clock-history me-1 fs-5 text-success"></i><br>
+            <small class="label text-uppercase text-secondary">Llegada</small><br>
+            <span class="info-text">{{ t.fechaLlegada | date:'HH:mm' }}</span>
+          </div>
+        </div>
+
+        <div class="actions text-end mt-2">
+          <button class="btn btn-success" (click)="openDetalle(t)">
+            Ver Detalle
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <nav class="nav flex-column">
+  <div
+    class="modal fade"
+    [class.show]="showDetalleModal"
+    [style.display]="showDetalleModal ? 'block' : 'none'"
+    tabindex="-1"
+    role="dialog"
+  >
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+      <div class="modal-content">
 
-    <small class="text-uppercase text-white-50 mb-2">Principal</small>
+        <!-- Cabecera -->
+        <div class="modal-header border-0">
+          <h5 class="modal-title">
+            <i class="bi bi-truck-front-fill me-2 text-success fs-4"></i>
+            Servicio N°{{ selectedTransport?.id }}
+          </h5>
+          <button type="button" class="btn-close" (click)="closeDetalle()"></button>
+        </div>
 
-    <a
-      routerLink="/dashboard"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-speedometer2 me-2"></i>
-      Dashboard
-    </a>
-
-    <a
-      routerLink="/gestion-obras"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-building me-2"></i>
-      Gestión de Obras
-    </a>
-
-    <a
-      routerLink="/transporte"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-truck me-2"></i>
-      Transporte
-    </a>
-
-    <a
-      routerLink="/registro-residuos"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-card-checklist me-2"></i>
-      Registro de Residuos
-    </a>
-
-    <a
-      routerLink="/inventario"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-box-seam me-2"></i>
-      Inventario
-    </a>
-
-    <a
-      routerLink="/procesar-residuos"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-recycle me-2"></i>
-      Procesar Residuos
-    </a>
-
-    <a
-      routerLink="/historial-trazabilidad"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-clock-history me-2"></i>
-      Historial y Trazabilidad
-    </a>
-
-    <a
-      routerLink="/reportes"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-bar-chart me-2"></i>
-      Reportes
-    </a>
-
-    <hr class="border-light">
-
-    <small class="text-uppercase text-white-50 mb-2">Sistema</small>
-    <a
-      routerLink="/perfil"
-      routerLinkActive="active"
-      class="nav-link text-white"
-    >
-      <i class="bi bi-person-circle me-2"></i>
-      Perfil
-    </a>
-          <a routerLink="/usuarios"
-         routerLinkActive="active"
-         class="nav-link text-white mt-2">
-        <i class="bi bi-people me-2"></i>Usuarios
-    </a>
-    <a
-      href="#"
-      (click)="logout()"
-      class="nav-link text-white mt-2"
-    >
-      <i class="bi bi-box-arrow-right me-2"></i>
-      Cerrar Sesión
-    </a>
-  </nav>
-</aside>
-
-  <main class="flex-grow-1 overflow-auto p-4">
-
-    <div class="d-flex justify-content-between align-items-start mb-4">
-      <div>
-        <h2 class="h4 mb-1">EcoConstruct</h2>
-        <small class="text-muted">Sistema de Gestión de Residuos de Construcción</small>
-      </div>
-      <div class="d-flex gap-2">
-        <select class="form-select form-select-sm">
-          <option>Filtrar por obra</option>
-        </select>
-        <select class="form-select form-select-sm">
-          <option>Tipo de residuo</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="row gx-3 gy-3 mb-4">
-      <div class="col-12 col-md-6 col-lg-3">
-        <button class="btn btn-outline-success step-btn d-flex align-items-center w-100 p-3">
-          <span class="step-number text-success fw-bold me-3">1.</span>
-          <div class="flex-grow-1 text-start">
-            <div class="step-title">Registro de Residuos</div>
-            <small class="step-subtitle text-muted">Ingresar nuevos residuos</small>
-          </div>
-          <span class="step-icon bg-success bg-opacity-10 rounded-circle p-2">
-            <i class="bi bi-plus-lg text-success"></i>
+        <div class="estado-container px-4 mb-2 d-flex justify-content-between align-items-center">
+          <h6 class="fw-semibold mb-0">Estado Actual</h6>
+          <span
+            class="badge status-badge"
+            [ngClass]="getEstadoBadgeClass(selectedTransport?.estadoTexto || '')"
+          >
+            {{ getEstadoTexto(selectedTransport?.estadoTexto || '') }}
           </span>
-        </button>
-      </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <button class="btn btn-outline-primary step-btn d-flex align-items-center w-100 p-3">
-          <span class="step-number text-primary fw-bold me-3">2.</span>
-          <div class="flex-grow-1 text-start">
-            <div class="step-title">Trazabilidad</div>
-            <small class="step-subtitle text-muted">Seguir recorrido de residuos</small>
+        </div>
+        <hr class="mx-4 my-2">
+
+        <div *ngIf="!editMode" class="modal-body px-4 pb-4">
+
+          <h6 class="fw-semibold mb-2">Información del Residuo</h6>
+          <strong>
+            {{
+              getResiduoNombrePorId(selectedTransport?.items?.[0]?.item?.id || 0)
+            }} – {{ selectedTransport?.items?.[0]?.quantity || 0 }} m³
+          </strong>
+          <hr>
+
+          <h6 class="fw-semibold mb-2">Ruta de Transporte</h6>
+          <p class="mb-1">
+            <i class="bi bi-geo-alt-fill text-success me-1 fs-5"></i>
+            <strong>Origen:</strong> {{ selectedTransport?.origen }}
+          </p>
+          <p class="mb-0">
+            <i class="bi bi-geo-alt text-danger me-1 fs-5"></i>
+            <strong>Destino:</strong> {{ selectedTransport?.destino }}
+          </p>
+          <hr>
+
+          <h6 class="fw-semibold mb-2">Información del Vehículo</h6>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-person-fill text-success me-1 fs-5"></i>
+                <strong>Transportista:</strong> {{ selectedTransport?.transportista }}
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-person-fill text-success me-1 fs-5"></i>
+                <strong>Conductor:</strong> {{ selectedTransport?.conductor }}
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-card-text text-success me-1 fs-5"></i>
+                <strong>Patente:</strong> {{ selectedTransport?.patente }}
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-hash text-success me-1 fs-5"></i>
+                <strong>Guía:</strong> {{ selectedTransport?.guia }}
+              </p>
+            </div>
           </div>
-          <span class="step-icon bg-primary bg-opacity-10 rounded-circle p-2">
-            <i class="bi bi-filter-right text-primary"></i>
-          </span>
-        </button>
-      </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <button class="btn btn-outline-secondary step-btn d-flex align-items-center w-100 p-3">
-          <span class="step-number text-secondary fw-bold me-3">3.</span>
-          <div class="flex-grow-1 text-start">
-            <div class="step-title">Reportes</div>
-            <small class="step-subtitle text-muted">Generar reportes visuales</small>
+          <hr>
+
+          <h6 class="fw-semibold mb-2">Horarios</h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-clock text-success me-1 fs-5"></i>
+                <strong>Hora de Salida:</strong>
+                {{ selectedTransport?.fechaSalida | date:'HH:mm' }}
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p class="mb-0">
+                <i class="bi bi-clock-history text-success me-1 fs-5"></i>
+                <strong>ETA:</strong>
+                {{ selectedTransport?.fechaLlegada | date:'HH:mm' }}
+              </p>
+            </div>
           </div>
-          <span class="step-icon bg-secondary bg-opacity-10 rounded-circle p-2">
-            <i class="bi bi-file-earmark-text text-secondary"></i>
-          </span>
-        </button>
-      </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <button class="btn btn-outline-warning step-btn d-flex align-items-center w-100 p-3">
-          <span class="step-number text-warning fw-bold me-3">4.</span>
-          <div class="flex-grow-1 text-start">
-            <div class="step-title">Panel Visual</div>
-            <small class="step-subtitle text-muted">Gráficos y estadísticas</small>
+
+        </div>
+
+        <form *ngIf="editMode" [formGroup]="form" class="modal-body px-4 pb-4">
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Transportista</label>
+              <input type="text" class="form-control" formControlName="transportista">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Residuo</label>
+              <select class="form-select" formControlName="residuoId">
+                <option *ngFor="let r of residuos" [value]="r.id">{{ r.name }}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Destino</label>
+              <input type="text" class="form-control" formControlName="obra">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Conductor</label>
+              <input type="text" class="form-control" formControlName="conductor">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Patente</label>
+              <input type="text" class="form-control" formControlName="patente">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Guía</label>
+              <input type="text" class="form-control" formControlName="guia">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha Salida</label>
+              <input type="datetime-local" class="form-control" formControlName="fechaSalida">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha Llegada</label>
+              <input type="datetime-local" class="form-control" formControlName="fechaLlegada">
+            </div>
           </div>
-          <span class="step-icon bg-warning bg-opacity-10 rounded-circle p-2">
-            <i class="bi bi-bar-chart-line-fill text-warning"></i>
-          </span>
-        </button>
+
+        </form>
+
+        <div class="modal-footer border-0 px-4 pb-3">
+          <button
+            *ngIf="!editMode"
+            type="button"
+            class="btn btn-warning"
+            (click)="onEdit()"
+          >
+            Editar
+          </button>
+          <button
+            *ngIf="editMode"
+            type="button"
+            class="btn btn-primary"
+            [disabled]="form.invalid"
+            (click)="onSave()"
+          >
+            Guardar
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeDetalle()"
+          >
+            Cerrar
+          </button>
+        </div>
+
       </div>
     </div>
-
-    <div class="row gx-3 gy-3 mb-4">
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body position-relative">
-            <i class="bi bi-box position-absolute" style="top:1rem; right:1rem; color:#6b7280;"></i>
-            <small class="text-muted">Total Residuos</small>
-            <h2 class="fw-bold mt-1">324 m³</h2>
-            <small class="text-success">Este mes</small>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body position-relative">
-            <i class="bi bi-arrow-repeat position-absolute" style="top:1rem; right:1rem; color:#6b7280;"></i>
-            <small class="text-muted">% Reciclado</small>
-            <h2 class="fw-bold text-success mt-1">68.5%</h2>
-            <small class="text-success">↑ 3.2%</small>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body position-relative">
-            <i class="bi bi-building position-absolute" style="top:1rem; right:1rem; color:#6b7280;"></i>
-            <small class="text-muted">Obras Activas</small>
-            <h2 class="fw-bold mt-1">3</h2>
-            <small class="text-muted">En seguimiento</small>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-6 col-lg-3">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body position-relative">
-            <i class="bi bi-graph-up position-absolute" style="top:1rem; right:1rem; color:#6b7280;"></i>
-            <small class="text-muted">Eficiencia</small>
-            <h2 class="fw-bold mt-1">85.2%</h2>
-            <small class="text-success">↑ 5.1%</small>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="row gx-4 gy-4 mb-4">
-      <div class="col-12 col-md-6">
-        <div class="card h-100 p-3 shadow-sm">
-          <h6 class="mb-3">Destino de Residuos</h6>
-          <div class="ratio ratio-1x1 mx-auto" style="max-width:300px">
-            <canvas
-              baseChart
-              [data]="pieChartData"
-              [type]="pieChartType"
-              [options]="pieChartOptions"
-              class="w-100 h-100">
-            </canvas>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-6">
-        <div class="card h-100 p-3 shadow-sm">
-          <h6 class="mb-3">Volumen por Obra y Tipo</h6>
-          <div class="ratio ratio-16x9">
-            <canvas
-              baseChart
-              [data]="barChartData"
-              [type]="barChartType"
-              [options]="barChartOptions"
-              class="w-100 h-100">
-            </canvas>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="d-flex flex-wrap gap-2 mb-4">
-      <button class="btn btn-success">
-        <i class="bi bi-plus-lg me-1"></i> Nuevo Registro
-      </button>
-      <button class="btn btn-outline-secondary">
-        <i class="bi bi-link-45deg me-1"></i> Ver Trazabilidad
-      </button>
-      <button class="btn btn-outline-secondary">
-        <i class="bi bi-file-earmark-text me-1"></i> Generar Reporte
-      </button>
-      <button class="btn btn-outline-secondary">
-        <i class="bi bi-filter me-1"></i> Filtros Avanzados
-      </button>
-    </div>
-  </main>
-</div>
+  </div>
