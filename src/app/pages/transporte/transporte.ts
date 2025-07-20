@@ -1,5 +1,5 @@
 // transporte.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -25,7 +25,8 @@ import { Residuo } from './residuo.model';
 export class TransporteComponent implements OnInit {
   form: FormGroup;
   enCurso: Transporte[] = [];
-
+  sidebarAbierto = false;
+  anchoPantalla = window.innerWidth;
   numeroServicio = this.enCurso.length + 1;
   residuos: Residuo[] = [];
   showDetalleModal = false;
@@ -55,6 +56,8 @@ export class TransporteComponent implements OnInit {
   ngOnInit() {
     this.load();
     this.loadResiduos();
+    this.anchoPantalla = window.innerWidth;
+    this.sidebarAbierto = this.anchoPantalla >= 768;
   }
 
   private load() {
@@ -195,4 +198,17 @@ openDetalle(t: Transporte) {
     sessionStorage.clear();
     this.router.navigate(['/login']);
   }
+
+  toggleSidebar() {
+    this.sidebarAbierto = !this.sidebarAbierto;
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    this.anchoPantalla = window.innerWidth;
+    if (this.anchoPantalla >= 768) {
+      this.sidebarAbierto = true;
+    }
+  }
+
 }
