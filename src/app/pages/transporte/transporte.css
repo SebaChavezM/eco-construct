@@ -1,3 +1,4 @@
+
 .sidebar {
   width: 240px;
   background-color: #16a249;
@@ -5,29 +6,36 @@
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease;
 }
+
 .logo-icon {
   font-size: 1.5rem;
 }
+
 .brand {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 2rem;
 }
+
 .brand-name {
   font-weight: 700;
   font-size: 1.2rem;
 }
+
 .nav-section {
   flex: 1;
 }
+
 .nav-section-title {
   text-transform: uppercase;
   font-size: 0.75rem;
   opacity: 0.7;
   margin: 1rem 0 0.5rem;
 }
+
 .nav-link {
   color: white;
   font-size: 0.9rem;
@@ -36,39 +44,45 @@
   gap: 0.5rem;
   padding: 0.25rem 0;
   text-decoration: none;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 }
+
 .nav-link:hover,
 .nav-link.active {
   opacity: 0.8;
 }
+
 .nav-link.active {
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .obra-card {
-  border-radius: .75rem;
+  border-radius: 0.75rem;
 }
+
 .obra-card h5 {
   font-weight: 600;
 }
+
 .obra-card .badge {
-  font-size: .75rem;
+  font-size: 0.75rem;
   text-transform: none;
-  padding: .4em .8em;
+  padding: 0.4em 0.8em;
 }
 
 .progress {
   background-color: #e9ecef;
 }
+
 .progress-bar {
-  transition: width .6s ease;
+  transition: width 0.6s ease;
 }
 
 .snack-success {
   background-color: #4caf50 !important;
   color: white;
 }
+
 .snack-error {
   background-color: #f44336 !important;
   color: white;
@@ -84,11 +98,13 @@
   background-color: #f8f9fa;
   border-radius: 0.75rem;
 }
+
 .transportes-en-curso .heading {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
+
 .transportes-en-curso .subheading {
   color: #6c757d;
   margin-bottom: 1.5rem;
@@ -98,9 +114,10 @@
 .transporte-card {
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
+
 .transporte-card .card-header {
   background: #fff;
   border-bottom: none;
@@ -109,10 +126,12 @@
   justify-content: space-between;
   align-items: center;
 }
+
 .transporte-title {
   font-size: 1.125rem;
   color: #212529;
 }
+
 .status-badge {
   background: #28a745;
   color: #fff;
@@ -120,49 +139,8 @@
   border-radius: 1rem;
   font-size: 0.8rem;
   text-transform: none;
-}
-
-.transporte-card .card-body {
-  padding: 1rem 1.5rem 1.5rem;
-}
-
-.info-row {
-  display: flex;
-  flex-wrap: wrap;
-  margin: -0.5rem;
-}
-.info-item {
-  flex: 1 1 200px;
-  display: flex;
-  align-items: flex-start;
-  padding: 0.5rem;
-}
-.info-item i {
-  font-size: 1.2rem;
-  color: #0d6efd;
-  margin-right: 0.5rem;
-}
-.info-item .label {
-  color: #6c757d;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-}
-.info-item .info-text {
-  font-size: 0.95rem;
-  color: #212529;
-  display: block;
-  margin-top: 0.1rem;
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1rem;
-}
-.actions .btn {
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  min-width: 100px;
+  margin-bottom: 1rem;
+  display: inline-block;
 }
 
 .transporte-card .card-body {
@@ -170,10 +148,15 @@
 }
 
 .info-row {
+  display: flex;
+  flex-wrap: wrap;
   margin: -0.25rem;
 }
 
 .info-item {
+  flex: 1 1 200px;
+  display: flex;
+  align-items: flex-start;
   padding: 0.25rem;
 }
 
@@ -182,13 +165,39 @@
 }
 
 .info-item i {
+  font-size: 1.2rem;
   color: #28a745 !important;
   margin-right: 0.4rem;
+}
+
+.info-item .label {
+  color: #6c757d;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.info-item .info-text {
+  font-size: 0.95rem;
+  color: #212529;
+  display: block;
+  margin-top: 0.1rem;
 }
 
 .col-auto.info-item {
   flex: 0 0 auto;
   width: auto;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.actions .btn {
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  min-width: 100px;
 }
 
 .modal-header {
@@ -223,16 +232,6 @@
   color: #28a745 !important;
 }
 
-.status-badge {
-  background: #28a745;
-  color: #fff;
-  padding: 0.35em 0.75em;
-  border-radius: 1rem;
-  font-size: 0.8rem;
-  margin-bottom: 1rem;
-  display: inline-block;
-}
-
 .modal-footer {
   padding-top: 0.5rem;
   padding-bottom: 0;
@@ -244,4 +243,79 @@
 
 .status-badge.bg-secondary {
   background-color: #6c757d;
+}
+
+@media (max-width: 991.98px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .sidebar nav {
+    display: none;
+  }
+
+  .sidebar.active nav {
+    display: flex;
+    flex-direction: column;
+    background-color: #16a249;
+    width: 100%;
+    padding: 1rem 0;
+  }
+
+  .sidebar-toggle-btn {
+    display: inline-block;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav-link {
+    font-size: 0.85rem;
+    padding: 0.35rem 0;
+  }
+
+  .transportes-en-curso .heading {
+    font-size: 1.25rem;
+  }
+
+  .transportes-en-curso .subheading {
+    font-size: 0.85rem;
+  }
+
+  .card-title i {
+    font-size: 1.2rem;
+  }
+
+  .info-item + .info-item {
+    margin-left: 0 !important;
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
 }
