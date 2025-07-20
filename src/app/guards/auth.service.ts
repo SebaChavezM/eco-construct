@@ -3,10 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { UserProfile } from '../pages/perfil/user-profile.model';
 import { MsalService } from '@azure/msal-angular';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly apiUrl = 'http://74.249.29.180:8080/api/users/me';
+  private readonly apiUrl = `${environment.apiUrl}/users/me`;
 
   constructor(private http: HttpClient, private msalService: MsalService ) {}
 
