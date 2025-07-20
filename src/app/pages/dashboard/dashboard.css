@@ -1,9 +1,3 @@
-.dashboard-layout {
-  display: flex;
-  min-height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f9fafb;
-}
 
 .sidebar {
   width: 240px;
@@ -12,29 +6,36 @@
   padding: 2rem 1rem;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease;
 }
+
 .logo-icon {
   font-size: 1.5rem;
 }
+
 .brand {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 2rem;
 }
+
 .brand-name {
   font-weight: 700;
   font-size: 1.2rem;
 }
+
 .nav-section {
   flex: 1;
 }
+
 .nav-section-title {
   text-transform: uppercase;
   font-size: 0.75rem;
   opacity: 0.7;
   margin: 1rem 0 0.5rem;
 }
+
 .nav-link {
   color: white;
   font-size: 0.9rem;
@@ -43,146 +44,278 @@
   gap: 0.5rem;
   padding: 0.25rem 0;
   text-decoration: none;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 }
-.nav-link.active,
-.nav-link:hover {
+
+.nav-link:hover,
+.nav-link.active {
   opacity: 0.8;
 }
 
-.main-content {
-  flex: 1;
-  padding: 1.5rem 2rem;
-  overflow-y: auto;
+.nav-link.active {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.step-btn {
-  border-width: 1.5px;
-  border-radius: 0.5rem;
-  transition: background-color .2s, box-shadow .2s;
+.obra-card {
+  border-radius: 0.75rem;
 }
 
-.step-btn:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
-
-.step-number {
-  font-size: 1rem;
-}
-
-.step-title {
-  font-size: 0.95rem;
+.obra-card h5 {
   font-weight: 600;
 }
 
-.step-subtitle {
-  font-size: 0.85rem;
+.obra-card .badge {
+  font-size: 0.75rem;
+  text-transform: none;
+  padding: 0.4em 0.8em;
 }
 
-.step-icon {
-  width: 2.25rem;
-  height: 2.25rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.progress {
+  background-color: #e9ecef;
 }
 
-.header {
+.progress-bar {
+  transition: width 0.6s ease;
+}
+
+.snack-success {
+  background-color: #4caf50 !important;
+  color: white;
+}
+
+.snack-error {
+  background-color: #f44336 !important;
+  color: white;
+}
+
+.card-title i {
+  color: #1fa63b;
+}
+
+.transportes-en-curso {
+  margin: 2rem auto;
+  padding: 0 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.75rem;
+}
+
+.transportes-en-curso .heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.transportes-en-curso .subheading {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.transporte-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.transporte-card .card-header {
+  background: #fff;
+  border-bottom: none;
+  padding: 1rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-}
-.page-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-.page-subtitle {
-  color: #6b7280;
-  font-size: 0.9rem;
-}
-.filters select {
-  width: auto;
-  margin-left: 0.5rem;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
+.transporte-title {
+  font-size: 1.125rem;
+  color: #212529;
 }
-.stat-card {
-  background: white;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-.stat-label {
-  font-size: 0.85rem;
-  color: #6b7280;
-}
-.stat-value {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin: 0.25rem 0;
-}
-.stat-footer {
+
+.status-badge {
+  background: #28a745;
+  color: #fff;
+  padding: 0.35em 0.75em;
+  border-radius: 1rem;
   font-size: 0.8rem;
+  text-transform: none;
+  margin-bottom: 1rem;
+  display: inline-block;
 }
 
-.charts-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.chart-card {
-  background: white;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-}
-.chart-header {
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-}
-.chart {
-  display: block;
-  width: 100% !important;
-  height: 300px !important;
+.transporte-card .card-body {
+  padding: 0.75rem 1rem 1rem;
 }
 
-.quick-actions {
+.info-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 2rem;
-}
-.quick-actions .btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  margin: -0.25rem;
 }
 
-@media (max-width: 768px) {
+.info-item {
+  flex: 1 1 200px;
+  display: flex;
+  align-items: flex-start;
+  padding: 0.25rem;
+}
+
+.info-item + .info-item {
+  margin-left: 7rem;
+}
+
+.info-item i {
+  font-size: 1.2rem;
+  color: #28a745 !important;
+  margin-right: 0.4rem;
+}
+
+.info-item .label {
+  color: #6c757d;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.info-item .info-text {
+  font-size: 0.95rem;
+  color: #212529;
+  display: block;
+  margin-top: 0.1rem;
+}
+
+.col-auto.info-item {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.actions .btn {
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  min-width: 100px;
+}
+
+.modal-header {
+  padding-bottom: 0.5rem;
+}
+
+.modal-header .modal-title {
+  font-weight: 600;
+}
+
+.modal-header .modal-title i {
+  color: #28a745;
+}
+
+.modal-body h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body p {
+  margin-bottom: 0.25rem;
+}
+
+.modal-body hr {
+  margin: 0.75rem 0;
+  border-color: #e9ecef;
+}
+
+.bi.text-success {
+  color: #28a745 !important;
+}
+
+.modal-footer {
+  padding-top: 0.5rem;
+  padding-bottom: 0;
+}
+
+.modal-footer .btn-success {
+  min-width: 100px;
+}
+
+.status-badge.bg-secondary {
+  background-color: #6c757d;
+}
+
+@media (max-width: 991.98px) {
   .dashboard-layout {
     flex-direction: column;
   }
+
   .sidebar {
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
   }
-  .steps {
-    grid-template-columns: 1fr;
+
+  .sidebar nav {
+    display: none;
   }
-  .header {
+
+  .sidebar.active nav {
+    display: flex;
+    flex-direction: column;
+    background-color: #16a249;
+    width: 100%;
+    padding: 1rem 0;
+  }
+
+  .sidebar-toggle-btn {
+    display: inline-block;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav-link {
+    font-size: 0.85rem;
+    padding: 0.35rem 0;
+  }
+
+  .transportes-en-curso .heading {
+    font-size: 1.25rem;
+  }
+
+  .transportes-en-curso .subheading {
+    font-size: 0.85rem;
+  }
+
+  .card-title i {
+    font-size: 1.2rem;
+  }
+
+  .info-item + .info-item {
+    margin-left: 0 !important;
+  }
+
+  .info-item {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
   }
 }
