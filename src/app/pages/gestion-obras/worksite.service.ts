@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CreateWorkSite, WorkSite } from './obra.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class WorkSiteService {
-  private readonly apiUrl = 'http://74.249.29.180:8080/api/worksites';
+  private readonly apiUrl = `${environment.apiUrl}/worksites`;
 
   constructor(private http: HttpClient) {}
 
